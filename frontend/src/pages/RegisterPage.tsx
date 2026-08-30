@@ -42,7 +42,7 @@ export default function RegisterPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value.toLowerCase())}
               placeholder="ex: lionel"
-              pattern="[a-z0-9_-]{3,24}"
+              pattern="[a-z0-9_\-]{3,24}"
               title="3 à 24 caractères : lettres minuscules, chiffres, _ ou -"
               required
             />
