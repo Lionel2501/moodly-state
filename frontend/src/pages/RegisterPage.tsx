@@ -1,15 +1,14 @@
 import { FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
 
 export default function RegisterPage() {
   const { register } = useAuth();
-  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
@@ -17,8 +16,8 @@ export default function RegisterPage() {
     setError(null);
     setSubmitting(true);
     try {
-      await register(username, email, password);
-      navigate('/');
+      const confirmation = await register(username, email);
+      setMessage(confirmation);
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
       setError(
@@ -27,6 +26,18 @@ export default function RegisterPage() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  if (message) {
+    return (
+      <div className="page-centered">
+        <div className="card">
+          <h1>moodly state</h1>
+          <p className="subtitle">Presque prêt !</p>
+          <p>{message}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -56,16 +67,6 @@ export default function RegisterPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Mot de passe
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength={8}
               required
             />
           </label>

@@ -11,6 +11,8 @@ import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { SetPasswordDto } from './dto/set-password.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CurrentUser, CurrentUserPayload } from './decorators/current-user.decorator';
 import { PrismaService } from '../prisma/prisma.service';
@@ -25,10 +27,8 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  async register(@Body() dto: RegisterDto, @Res({ passthrough: true }) res: Response) {
-    const { accessToken, user } = await this.authService.register(dto);
-    this.setSessionCookie(res, accessToken);
-    return { user };
+  async register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
   }
 
   @Post('login')
@@ -36,6 +36,25 @@ export class AuthController {
     const { accessToken, user } = await this.authService.login(dto);
     this.setSessionCookie(res, accessToken);
     return { user };
+  }
+
+  @Post('set-password')
+  async setPassword(@Body() dto: SetPasswordDto, @Res({ passthrough: true }) res: Response) {
+    const { accessToken, user } = await this.authService.setPassword(dto);
+    this.setSessionCookie(res, accessToken);
+    return { user };
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() dto: SetPasswordDto, @Res({ passthrough: true }) res: Response) {
+    const { accessToken, user } = await this.authService.resetPassword(dto);
+    this.setSessionCookie(res, accessToken);
+    return { user };
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
   }
 
   @Post('logout')
@@ -57,7 +76,7 @@ export class AuthController {
   private setSessionCookie(res: Response, accessToken: string) {
     res.cookie(process.env.COOKIE_NAME ?? 'moodly_session', accessToken, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: (process.env.COOKIE_SAMESITE ?? 'lax') as 'lax' | 'strict' | 'none',
       secure: process.env.COOKIE_SECURE === 'true',
       maxAge: COOKIE_MAX_AGE_MS,
       path: '/',

@@ -7,13 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TokenPurpose {
+  SET_PASSWORD
+  RESET_PASSWORD
+}
+
 model User {
   id           String      @id @default(uuid())
   username     String      @unique
   email        String      @unique
-  passwordHash String
+  passwordHash String?
   createdAt    DateTime    @default(now())
   states       MoodState[]
+  authTokens   AuthToken[]
+}
+
+model AuthToken {
+  id        String       @id @default(uuid())
+  // sha256 of the raw token; the raw token only ever exists in the emailed link
+  tokenHash String       @unique
+  purpose   TokenPurpose
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime     @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model MoodState {

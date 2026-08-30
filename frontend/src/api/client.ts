@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL ?? '/api',
   withCredentials: true,
 });
 
@@ -34,18 +34,40 @@ export interface AuthUser {
   username: string;
 }
 
-export async function register(username: string, email: string, password: string) {
-  const { data } = await api.post<{ user: AuthUser }>('/auth/register', {
+export async function register(username: string, email: string) {
+  const { data } = await api.post<{ message: string }>('/auth/register', {
     username,
     email,
-    password,
   });
-  return data.user;
+  return data.message;
 }
 
 export async function login(email: string, password: string) {
   const { data } = await api.post<{ user: AuthUser }>('/auth/login', { email, password });
   return data.user;
+}
+
+export async function setPassword(username: string, token: string, password: string) {
+  const { data } = await api.post<{ user: AuthUser }>('/auth/set-password', {
+    username,
+    token,
+    password,
+  });
+  return data.user;
+}
+
+export async function resetPassword(username: string, token: string, password: string) {
+  const { data } = await api.post<{ user: AuthUser }>('/auth/reset-password', {
+    username,
+    token,
+    password,
+  });
+  return data.user;
+}
+
+export async function forgotPassword(identifier: string) {
+  const { data } = await api.post<{ message: string }>('/auth/forgot-password', { identifier });
+  return data.message;
 }
 
 export async function logout() {
