@@ -4,3 +4,5 @@ dist/
 .env.local
 *.log
 *.tsbuildinfo
+.design-tmp/*.html
+!.design-tmp/*.dc.html
