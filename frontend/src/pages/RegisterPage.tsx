@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
+import BrandMark from '../components/BrandMark';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -31,10 +32,10 @@ export default function RegisterPage() {
   if (message) {
     return (
       <div className="page-centered">
+        <BrandMark size="sm" />
         <div className="card">
-          <h1>moodly state</h1>
-          <p className="subtitle">Presque prêt !</p>
-          <p>{message}</p>
+          <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Presque prêt !</h1>
+          <p style={{ textAlign: 'center' }}>{message}</p>
         </div>
       </div>
     );
@@ -42,41 +43,36 @@ export default function RegisterPage() {
 
   return (
     <div className="page-centered">
+      <BrandMark size="sm" />
       <div className="card">
-        <h1>moodly state</h1>
-        <p className="subtitle">Créer un compte</p>
+        <h1 style={{ fontSize: 22, margin: 0 }}>Créer un compte</h1>
         <form onSubmit={handleSubmit} className="form">
-          <label>
-            Nom d'utilisateur
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value.toLowerCase())}
-              placeholder="ex: lionel"
-              pattern="[a-z0-9_\-]{3,24}"
-              title="3 à 24 caractères : lettres minuscules, chiffres, _ ou -"
-              required
-            />
-          </label>
-          <p className="hint">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value.toLowerCase())}
+            placeholder="Nom d'utilisateur"
+            pattern="[a-z0-9_\-]{3,24}"
+            title="3 à 24 caractères : lettres minuscules, chiffres, _ ou -"
+            required
+          />
+          <p className="hint" style={{ textAlign: 'left', margin: '-4px 0 0' }}>
             Il sera visible dans l'url que tu partages : domain/{username || 'username'}/code
           </p>
-          <label>
-            Email
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={submitting}>
             {submitting ? '...' : 'Créer mon compte'}
           </button>
         </form>
-        <p className="hint">
-          Déjà un compte ? <Link to="/login">Se connecter</Link>
+        <p className="hint" style={{ marginTop: 16 }}>
+          <Link to="/login">J'ai déjà un compte</Link>
         </p>
       </div>
     </div>

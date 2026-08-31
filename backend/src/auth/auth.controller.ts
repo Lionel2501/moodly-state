@@ -59,7 +59,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie(process.env.COOKIE_NAME ?? 'moodly_session');
+    res.clearCookie(process.env.COOKIE_NAME ?? 'linka_session');
     return { success: true };
   }
 
@@ -74,7 +74,7 @@ export class AuthController {
   }
 
   private setSessionCookie(res: Response, accessToken: string) {
-    res.cookie(process.env.COOKIE_NAME ?? 'moodly_session', accessToken, {
+    res.cookie(process.env.COOKIE_NAME ?? 'linka_session', accessToken, {
       httpOnly: true,
       sameSite: (process.env.COOKIE_SAMESITE ?? 'lax') as 'lax' | 'strict' | 'none',
       secure: process.env.COOKIE_SECURE === 'true',

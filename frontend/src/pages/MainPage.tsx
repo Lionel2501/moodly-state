@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchStates, MoodStateDto } from '../api/client';
+import BrandMark from '../components/BrandMark';
 
 export default function MainPage() {
   const { user, logout } = useAuth();
@@ -28,25 +29,25 @@ export default function MainPage() {
   return (
     <div className="page">
       <header className="topbar">
-        <h1>moodly state</h1>
+        <BrandMark size="sm" inline />
         <div className="topbar-actions">
-          <span className="username">@{user?.username}</span>
           <button className="link-button" onClick={() => logout()}>
             Déconnexion
           </button>
+          <div className="avatar">{user?.username?.[0]?.toUpperCase()}</div>
         </div>
       </header>
 
       <main className="content">
         <Link to="/generate" className="button primary generate-button">
-          Generate
+          Générer un état
         </Link>
 
-        <section>
-          <h2>Mes states générés</h2>
-          {loading && <p>Chargement...</p>}
+        <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <span className="section-label">Mes états</span>
+          {loading && <p className="hint">Chargement...</p>}
           {!loading && states.length === 0 && (
-            <p className="hint">Aucun state pour l'instant, clique sur "Generate" pour en créer un.</p>
+            <p className="hint">Aucun état pour l'instant — génère le premier.</p>
           )}
           <ul className="state-list">
             {states.map((state) => (

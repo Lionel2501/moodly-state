@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
+import BrandMark from '../components/BrandMark';
 
 export default function SetPasswordPage() {
   const { username } = useParams<{ username: string }>();
@@ -37,30 +38,26 @@ export default function SetPasswordPage() {
 
   return (
     <div className="page-centered">
+      <BrandMark size="sm" />
       <div className="card">
-        <h1>moodly state</h1>
-        <p className="subtitle">Choisis ton mot de passe, {username}</p>
+        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Choisis ton mot de passe, {username}</h1>
         <form onSubmit={handleSubmit} className="form">
-          <label>
-            Mot de passe
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPasswordValue(e.target.value)}
-              minLength={8}
-              required
-            />
-          </label>
-          <label>
-            Confirmer le mot de passe
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              minLength={8}
-              required
-            />
-          </label>
+          <input
+            type="password"
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(e) => setPasswordValue(e.target.value)}
+            minLength={8}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirmer le mot de passe"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            minLength={8}
+            required
+          />
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={submitting}>
             {submitting ? '...' : 'Activer mon compte'}

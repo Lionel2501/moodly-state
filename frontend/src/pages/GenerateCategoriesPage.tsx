@@ -15,18 +15,22 @@ export default function GenerateCategoriesPage() {
   return (
     <div className="page">
       <header className="topbar">
-        <h1>moodly state</h1>
-        <Link to="/" className="link-button">
-          Annuler
+        <Link to="/" className="back-link">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Choisis ton état
         </Link>
       </header>
       <main className="content">
-        <h2>Choisis une catégorie</h2>
-        {loading && <p>Chargement...</p>}
+        {loading && <p className="hint">Chargement...</p>}
         <div className="category-grid">
           {steps.map((step) => (
             <Link key={step.id} to={`/generate/${step.id}`} className="button category-button">
               {step.name}
+              <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
             </Link>
           ))}
         </div>

@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { forgotPassword } from '../api/client';
+import BrandMark from '../components/BrandMark';
 
 export default function ForgotPasswordPage() {
   const [identifier, setIdentifier] = useState('');
@@ -23,10 +24,10 @@ export default function ForgotPasswordPage() {
   if (message) {
     return (
       <div className="page-centered">
+        <BrandMark size="sm" />
         <div className="card">
-          <h1>moodly state</h1>
-          <p className="subtitle">Vérifie tes emails</p>
-          <p>{message}</p>
+          <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Vérifie tes emails</h1>
+          <p style={{ textAlign: 'center' }}>{message}</p>
         </div>
       </div>
     );
@@ -34,24 +35,22 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="page-centered">
+      <BrandMark size="sm" />
       <div className="card">
-        <h1>moodly state</h1>
-        <p className="subtitle">Mot de passe oublié</p>
+        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Mot de passe oublié</h1>
         <form onSubmit={handleSubmit} className="form">
-          <label>
-            Nom d'utilisateur ou email
-            <input
-              type="text"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
-            />
-          </label>
+          <input
+            type="text"
+            placeholder="Nom d'utilisateur ou email"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            required
+          />
           <button type="submit" disabled={submitting}>
-            {submitting ? '...' : 'Envoyer le lien de réinitialisation'}
+            {submitting ? '...' : 'Envoyer le lien'}
           </button>
         </form>
-        <p className="hint">
+        <p className="hint" style={{ marginTop: 16 }}>
           <Link to="/login">Retour à la connexion</Link>
         </p>
       </div>

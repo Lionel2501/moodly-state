@@ -40,7 +40,7 @@ export class MailService {
     const url = `${this.baseUrl()}/${username}/inscription?token=${token}`;
     await this.send(
       to,
-      'Bienvenue sur moodly state — choisis ton mot de passe',
+      'Bienvenue sur Linka — choisis ton mot de passe',
       `<p>Bienvenue ${username} !</p><p>Choisis ton mot de passe pour activer ton compte :</p><p><a href="${url}">${url}</a></p>`,
     );
   }
@@ -49,7 +49,7 @@ export class MailService {
     const url = `${this.baseUrl()}/${username}/reset-password?token=${token}`;
     await this.send(
       to,
-      'moodly state — réinitialise ton mot de passe',
+      'Linka — réinitialise ton mot de passe',
       `<p>Tu as demandé à réinitialiser ton mot de passe.</p><p><a href="${url}">${url}</a></p><p>Si tu n'es pas à l'origine de cette demande, ignore cet email.</p>`,
     );
   }

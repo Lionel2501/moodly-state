@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { createState, fetchCategories, MoodStateDto, Step } from '../api/client';
+import BrandMark from '../components/BrandMark';
 
 export default function GenerateSubcategoriesPage() {
   const { stepId } = useParams<{ stepId: string }>();
@@ -54,14 +55,12 @@ export default function GenerateSubcategoriesPage() {
     return (
       <div className="page">
         <header className="topbar">
-          <h1>moodly state</h1>
+          <BrandMark size="sm" inline />
         </header>
         <main className="content">
           <div className="card result-card">
-            <h2>State généré</h2>
-            <p>
-              <strong>{result.stepName}</strong> — {result.feeling}
-            </p>
+            <span className="public-category">{result.stepName}</span>
+            <h2 style={{ fontSize: 22, margin: 0 }}>{result.feeling}</h2>
             <div className="state-url-row">
               <code className="state-url">{result.url}</code>
               <button onClick={copyUrl}>{copied ? 'Copié !' : 'Copier'}</button>
@@ -78,14 +77,15 @@ export default function GenerateSubcategoriesPage() {
   return (
     <div className="page">
       <header className="topbar">
-        <h1>moodly state</h1>
-        <Link to="/generate" className="link-button">
-          Retour
+        <Link to="/generate" className="back-link">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          {step?.name ?? '...'}
         </Link>
       </header>
       <main className="content">
-        <h2>{step?.name ?? '...'}</h2>
-        {loading && <p>Chargement...</p>}
+        {loading && <p className="hint">Chargement...</p>}
         {error && <p className="error">{error}</p>}
         <div className="category-grid">
           {step?.feelings.map((feeling) => (
@@ -96,6 +96,9 @@ export default function GenerateSubcategoriesPage() {
               onClick={() => handleSelect(feeling)}
             >
               {feeling}
+              <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
             </button>
           ))}
         </div>
