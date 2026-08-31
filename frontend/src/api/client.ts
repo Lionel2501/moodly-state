@@ -5,10 +5,17 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+export interface CategoryEmotion {
+  key: string;
+  label: string;
+}
+
 export interface Step {
   id: number;
+  slug: string;
   name: string;
-  feelings: string[];
+  description: string;
+  emotions: CategoryEmotion[];
 }
 
 export interface MoodStateDto {

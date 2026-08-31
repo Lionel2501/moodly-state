@@ -337,6 +337,25 @@ button[type='submit']:hover {
   color: var(--accent);
 }
 
+.category-button-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.category-button-name {
+  font-family: 'Newsreader', serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.category-button-description {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
 .state-list {
   list-style: none;
   padding: 0;

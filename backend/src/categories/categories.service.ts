@@ -17,7 +17,7 @@ export class CategoriesService {
 
   findFeeling(stepId: number, feeling: string): CategoryStep {
     const step = this.findOne(stepId);
-    if (!step.feelings.includes(feeling)) {
+    if (!step.emotions.some((emotion) => emotion.label === feeling)) {
       throw new NotFoundException('Sub-category not found for this category');
     }
     return step;

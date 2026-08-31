@@ -88,14 +88,14 @@ export default function GenerateSubcategoriesPage() {
         {loading && <p className="hint">Chargement...</p>}
         {error && <p className="error">{error}</p>}
         <div className="category-grid">
-          {step?.feelings.map((feeling) => (
+          {step?.emotions.map((emotion) => (
             <button
-              key={feeling}
+              key={emotion.key}
               className="button category-button"
               disabled={generating}
-              onClick={() => handleSelect(feeling)}
+              onClick={() => handleSelect(emotion.label)}
             >
-              {feeling}
+              {emotion.label}
               <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 18l6-6-6-6" />
               </svg>

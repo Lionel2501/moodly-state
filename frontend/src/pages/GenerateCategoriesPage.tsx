@@ -27,7 +27,10 @@ export default function GenerateCategoriesPage() {
         <div className="category-grid">
           {steps.map((step) => (
             <Link key={step.id} to={`/generate/${step.id}`} className="button category-button">
-              {step.name}
+              <span className="category-button-text">
+                <span className="category-button-name">{step.name}</span>
+                <span className="category-button-description">{step.description}</span>
+              </span>
               <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 18l6-6-6-6" />
               </svg>
