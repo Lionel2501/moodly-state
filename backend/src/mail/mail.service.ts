@@ -1,11 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Resend } from 'resend';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
-  private readonly resend = process.env.RESEND_API_KEY
-    ? new Resend(process.env.RESEND_API_KEY)
+  private readonly transporter = process.env.SMTP_HOST
+    ? nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT ?? 465),
+        secure: process.env.SMTP_SECURE !== 'false',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      })
     : null;
 
   private baseUrl(): string {
@@ -13,15 +21,15 @@ export class MailService {
   }
 
   private async send(to: string, subject: string, html: string) {
-    if (!this.resend) {
+    if (!this.transporter) {
       this.logger.warn(
-        `RESEND_API_KEY is not set — logging email instead of sending.\nTo: ${to}\nSubject: ${subject}\n${html}`,
+        `SMTP_HOST is not set — logging email instead of sending.\nTo: ${to}\nSubject: ${subject}\n${html}`,
       );
       return;
     }
 
-    await this.resend.emails.send({
-      from: process.env.MAIL_FROM ?? 'moodly state <onboarding@resend.dev>',
+    await this.transporter.sendMail({
+      from: process.env.MAIL_FROM ?? process.env.SMTP_USER,
       to,
       subject,
       html,
