@@ -1,8 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Controller, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 
-@UseGuards(JwtAuthGuard)
+// Public: category/emotion data is static, non-sensitive config, and is
+// also needed by the anonymous "share an emotion" flow.
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
