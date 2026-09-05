@@ -1,4 +1,4 @@
-# Linka
+# Kanjo
 
 SaaS où chaque utilisateur génère un "state" (une catégorie + une sous-catégorie
 issues d'un parcours en 7 étapes) et obtient une URL courte et unique à partager :

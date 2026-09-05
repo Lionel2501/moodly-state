@@ -20,6 +20,7 @@ model User {
   passwordHash String?
   createdAt    DateTime    @default(now())
   states       MoodState[]
+  statesAbout  MoodState[] @relation("StatesAbout")
   authTokens   AuthToken[]
 }
 
@@ -49,9 +50,32 @@ model MoodState {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Who the state is about (e.g. a relationship this feeling concerns).
+  // Optional and independent from the owner — the state stays visible to
+  // the owner even if the referenced user is later deleted.
+  aboutUserId String?
+  aboutUser   User?   @relation("StatesAbout", fields: [aboutUserId], references: [id], onDelete: SetNull)
+
   // A code only needs to be unique per user: the public URL is
   // {BASE_URL}/{username}/{code}, so the (username, code) pair is what
   // must resolve unambiguously — different users may share a code.
   @@unique([userId, code])
+  // A given creator can only have one state about any particular person
+  // at a time (NULLs are exempt: Postgres treats each NULL as distinct,
+  // so states with no aboutUser never collide here).
+  @@unique([userId, aboutUserId])
   @@index([userId])
+  @@index([aboutUserId])
+}
+
+// A state shared anonymously, with no logged-in user behind it: the code
+// is the only handle on it, so it must be globally unique (unlike
+// MoodState.code, which only needs to be unique per owning user).
+model SharedState {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  stepId    Int
+  stepName  String
+  feeling   String
+  createdAt DateTime @default(now())
 }
