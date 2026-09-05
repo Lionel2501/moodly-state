@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateStateDto {
   @IsInt()
@@ -6,4 +6,8 @@ export class CreateStateDto {
 
   @IsString()
   feeling!: string;
+
+  @IsOptional()
+  @IsUUID()
+  aboutUserId?: string;
 }

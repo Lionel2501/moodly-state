@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { StatesModule } from './states/states.module';
 import { PublicModule } from './public/public.module';
+import { UsersModule } from './users/users.module';
+import { SharedStatesModule } from './shared-states/shared-states.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { PublicModule } from './public/public.module';
     CategoriesModule,
     StatesModule,
     PublicModule,
+    UsersModule,
+    SharedStatesModule,
   ],
 })
 export class AppModule {}

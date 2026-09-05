@@ -6,9 +6,10 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import SetPasswordPage from './pages/SetPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import MainPage from './pages/MainPage';
-import GenerateCategoriesPage from './pages/GenerateCategoriesPage';
-import GenerateSubcategoriesPage from './pages/GenerateSubcategoriesPage';
+import GeneratePage from './pages/GeneratePage';
 import PublicStatePage from './pages/PublicStatePage';
+import SharePage from './pages/SharePage';
+import DiscoverPage from './pages/DiscoverPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 export default function App() {
@@ -18,10 +19,13 @@ export default function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
+      {/* Anonymous, account-free flow: pick an emotion, get a shareable code */}
+      <Route path="/share" element={<SharePage />} />
+      <Route path="/discover" element={<DiscoverPage />} />
+
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<MainPage />} />
-        <Route path="/generate" element={<GenerateCategoriesPage />} />
-        <Route path="/generate/:stepId" element={<GenerateSubcategoriesPage />} />
+        <Route path="/generate" element={<GeneratePage />} />
       </Route>
 
       {/* Must stay before the /:username/:code catch-all so it doesn't shadow these */}
