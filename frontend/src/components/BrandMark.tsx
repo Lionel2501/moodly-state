@@ -7,7 +7,7 @@ export default function BrandMark({ size = 'sm', inline = false }: { size?: 'sm'
           <circle cx="30" cy="30" r="9" fill="var(--accent)" />
         </svg>
       </span>
-      <span>Linka</span>
+      <span>Kanjo</span>
     </div>
   );
 }

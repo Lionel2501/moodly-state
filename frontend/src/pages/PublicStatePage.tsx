@@ -38,7 +38,7 @@ export default function PublicStatePage() {
       <span className="public-category">{state.stepName}</span>
       <p className="public-feeling">{state.feeling}</p>
       <Link to="/register" className="button outline" style={{ width: '100%', maxWidth: 320, marginTop: 28 }}>
-        Créer mon Linka
+        Créer mon Kanjo
       </Link>
     </div>
   );
