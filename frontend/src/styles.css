@@ -560,6 +560,10 @@ select:focus {
 
 .public-state-card {
   max-width: 400px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 16px 16px;
 }
 
 .public-category {
@@ -578,3 +582,36 @@ select:focus {
   font-weight: 500;
   margin: 6px 0 0;
 }
+
+/* Smaller screens: the login illustration and tagline ate too much height
+   above the fold, pushing the form and guest-access buttons out of view. */
+@media (max-width: 480px) {
+  .page-centered {
+    padding: 20px 20px 32px;
+    gap: 4px;
+  }
+
+  .brand-lg {
+    font-size: 24px;
+  }
+
+  .brand-lg .brand-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .tagline {
+    font-size: 17px;
+  }
+
+  .illustration {
+    width: 130px;
+    height: 141px;
+    margin: 0;
+  }
+
+  .card {
+    padding: 24px 20px;
+  }
+}
+
