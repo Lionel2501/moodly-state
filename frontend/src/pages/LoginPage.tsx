@@ -1,10 +1,12 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
 import BrandMark from '../components/BrandMark';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ export default function LoginPage() {
       navigate('/');
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
-      setError(typeof message === 'string' ? message : 'Connexion impossible');
+      setError(typeof message === 'string' ? message : t('login.genericError'));
     } finally {
       setSubmitting(false);
     }
@@ -59,41 +61,41 @@ export default function LoginPage() {
       <div className="card" style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <Link to="/share" className="button outline">
-            Partager une émotion
+            {t('login.sharePrompt')}
           </Link>
           <Link to="/discover" className="link-button" style={{ textAlign: 'center' }}>
-            Découvrir un état
+            {t('login.discoverPrompt')}
           </Link>
         </div>
       </div>
 
       <div className="card" style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <span className="section-label">Connexion</span>
+        <span className="section-label">{t('login.connexion')}</span>
         <form onSubmit={handleSubmit} className="form">
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t('login.emailPlaceholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder={t('login.passwordPlaceholder')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <p className="hint" style={{ textAlign: 'right', margin: 0 }}>
-            <Link to="/forgot-password">Mot de passe oublié ?</Link>
+            <Link to="/forgot-password">{t('login.forgotPassword')}</Link>
           </p>
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={submitting}>
-            {submitting ? '...' : 'Se connecter'}
+            {submitting ? '...' : t('login.submit')}
           </button>
         </form>
         <p className="hint" style={{ margin: 0 }}>
-          <Link to="/register">Créer un compte</Link>
+          <Link to="/register">{t('login.createAccount')}</Link>
         </p>
       </div>
     </div>

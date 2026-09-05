@@ -1,13 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { createState, fetchCategories, fetchStates, MoodStateDto, searchUsers, Step, UserSummary } from '../api/client';
+import { useTranslation } from 'react-i18next';
+import {
+  CategoryEmotion,
+  createState,
+  fetchCategories,
+  fetchStates,
+  MoodStateDto,
+  searchUsers,
+  Step,
+  UserSummary,
+} from '../api/client';
 import BrandMark from '../components/BrandMark';
+import { useCategoryTranslation } from '../i18n/categories';
 
 export default function GeneratePage() {
+  const { t } = useTranslation();
+  const { stepName, stepDescription, emotionLabel, stateStepName, stateFeeling } = useCategoryTranslation();
   const [steps, setSteps] = useState<Step[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStepId, setSelectedStepId] = useState<number | null>(null);
-  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(null);
+  const [selectedEmotion, setSelectedEmotion] = useState<CategoryEmotion | null>(null);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<MoodStateDto | null>(null);
   const [copied, setCopied] = useState(false);
@@ -53,18 +66,18 @@ export default function GeneratePage() {
 
   function handleSelectStep(stepId: number) {
     setSelectedStepId(stepId || null);
-    setSelectedFeeling(null);
+    setSelectedEmotion(null);
   }
 
   async function handleConfirm() {
-    if (!step || !selectedFeeling || !selectedUser) return;
+    if (!step || !selectedEmotion || !selectedUser) return;
     setGenerating(true);
     setError(null);
     try {
-      const state = await createState(step.id, selectedFeeling, selectedUser.id);
+      const state = await createState(step.id, selectedEmotion.key, selectedUser.id);
       setResult(state);
     } catch {
-      setError("La génération a échoué, réessaie.");
+      setError(t('generate.generationFailed'));
     } finally {
       setGenerating(false);
     }
@@ -89,17 +102,17 @@ export default function GeneratePage() {
         </header>
         <main className="content">
           <div className="card result-card">
-            <span className="public-category">{result.stepName}</span>
-            <h2 style={{ fontSize: 22, margin: 0 }}>{result.feeling}</h2>
+            <span className="public-category">{stateStepName(result.stepId, result.stepName)}</span>
+            <h2 style={{ fontSize: 22, margin: 0 }}>{stateFeeling(result.feeling)}</h2>
             {result.aboutUser && (
-              <p className="hint">à propos de @{result.aboutUser.username}</p>
+              <p className="hint">{t('generate.about', { username: result.aboutUser.username })}</p>
             )}
             <div className="state-url-row">
               <code className="state-url">{result.url}</code>
-              <button onClick={copyUrl}>{copied ? 'Copié !' : 'Copier'}</button>
+              <button onClick={copyUrl}>{copied ? t('common.copied') : t('common.copy')}</button>
             </div>
             <Link to="/" className="button primary">
-              Retour à l'accueil
+              {t('common.backToHome')}
             </Link>
           </div>
         </main>
@@ -107,7 +120,8 @@ export default function GeneratePage() {
     );
   }
 
-  if (step && selectedFeeling) {
+  if (step && selectedEmotion) {
+    const replacedState = existingStates.find((s) => s.aboutUser?.id === selectedUser?.id);
     return (
       <div className="page">
         <header className="topbar">
@@ -115,24 +129,23 @@ export default function GeneratePage() {
         </header>
         <main className="content">
           <div className="card result-card fade-in">
-            <span className="public-category">{step.name}</span>
-            <h2 style={{ fontSize: 22, margin: 0 }}>{selectedFeeling}</h2>
+            <span className="public-category">{stepName(step)}</span>
+            <h2 style={{ fontSize: 22, margin: 0 }}>{emotionLabel(selectedEmotion)}</h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <span className="section-label">Associer à</span>
+              <span className="section-label">{t('generate.associateWith')}</span>
 
               {selectedUser ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   <div className="selected-user">
                     <span className="selected-user-name">@{selectedUser.username}</span>
                     <button className="link-button" onClick={() => setSelectedUser(null)}>
-                      Changer
+                      {t('generate.change')}
                     </button>
                   </div>
-                  {existingStates.find((s) => s.aboutUser?.id === selectedUser.id) && (
+                  {replacedState && (
                     <p className="hint">
-                      Remplace l'état actuel :{' '}
-                      {existingStates.find((s) => s.aboutUser?.id === selectedUser.id)?.feeling}
+                      {t('generate.replacesCurrentState', { feeling: stateFeeling(replacedState.feeling) })}
                     </p>
                   )}
                 </div>
@@ -140,13 +153,13 @@ export default function GeneratePage() {
                 <div className="user-search">
                   <input
                     type="text"
-                    placeholder="Rechercher un utilisateur..."
+                    placeholder={t('generate.searchUserPlaceholder')}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                   />
-                  {searching && <p className="hint">Recherche...</p>}
+                  {searching && <p className="hint">{t('generate.searching')}</p>}
                   {!searching && query.trim() && results.length === 0 && (
-                    <p className="hint">Aucun utilisateur trouvé.</p>
+                    <p className="hint">{t('generate.noUserFound')}</p>
                   )}
                   {results.length > 0 && (
                     <ul className="user-results">
@@ -169,10 +182,10 @@ export default function GeneratePage() {
               disabled={generating || !selectedUser}
               onClick={handleConfirm}
             >
-              {generating ? 'Association...' : 'Confirmer'}
+              {generating ? t('generate.associating') : t('generate.confirm')}
             </button>
-            <button disabled={generating} onClick={() => setSelectedFeeling(null)}>
-              Changer d'état
+            <button disabled={generating} onClick={() => setSelectedEmotion(null)}>
+              {t('generate.changeState')}
             </button>
           </div>
         </main>
@@ -186,10 +199,10 @@ export default function GeneratePage() {
         <BrandMark size="sm" inline />
       </header>
       <main className="content">
-        {loading && <p className="hint">Chargement...</p>}
+        {loading && <p className="hint">{t('common.loading')}</p>}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span className="section-label">Catégorie</span>
+          <span className="section-label">{t('generate.category')}</span>
           <div className="category-grid">
             {steps.map((s) => (
               <button
@@ -200,8 +213,8 @@ export default function GeneratePage() {
                 onClick={() => handleSelectStep(s.id === selectedStepId ? 0 : s.id)}
               >
                 <span className="category-button-text">
-                  <span className="category-button-name">{s.name}</span>
-                  <span className="category-button-description">{s.description}</span>
+                  <span className="category-button-name">{stepName(s)}</span>
+                  <span className="category-button-description">{stepDescription(s)}</span>
                 </span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 18l6-6-6-6" />
@@ -213,15 +226,15 @@ export default function GeneratePage() {
 
         {step && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <span className="section-label">Sous-catégorie</span>
+            <span className="section-label">{t('generate.subcategory')}</span>
             <div className="category-grid">
               {step.emotions.map((emotion) => (
                 <button
                   key={emotion.key}
                   className="button category-button"
-                  onClick={() => setSelectedFeeling(emotion.label)}
+                  onClick={() => setSelectedEmotion(emotion)}
                 >
-                  {emotion.label}
+                  {emotionLabel(emotion)}
                   <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18l6-6-6-6" />
                   </svg>

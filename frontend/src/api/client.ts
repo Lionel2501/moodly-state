@@ -44,6 +44,7 @@ export interface PublicStateDto {
 
 export interface SharedStateDto {
   code: string;
+  stepId: number;
   stepName: string;
   feeling: string;
   createdAt: string;

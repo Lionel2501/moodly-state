@@ -37,6 +37,7 @@ export class SharedStatesService {
 
       return {
         code: state.code,
+        stepId: state.stepId,
         stepName: state.stepName,
         feeling: state.feeling,
         createdAt: state.createdAt,
@@ -53,6 +54,7 @@ export class SharedStatesService {
     }
 
     return {
+      stepId: state.stepId,
       stepName: state.stepName,
       feeling: state.feeling,
       createdAt: state.createdAt,

@@ -1,10 +1,12 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
 import BrandMark from '../components/BrandMark';
 
 export default function ResetPasswordPage() {
+  const { t } = useTranslation();
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
@@ -20,7 +22,7 @@ export default function ResetPasswordPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
+      setError(t('resetPassword.mismatch'));
       return;
     }
 
@@ -30,7 +32,7 @@ export default function ResetPasswordPage() {
       navigate('/');
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
-      setError(typeof message === 'string' ? message : 'Lien invalide ou expiré');
+      setError(typeof message === 'string' ? message : t('resetPassword.invalidOrExpired'));
     } finally {
       setSubmitting(false);
     }
@@ -40,11 +42,11 @@ export default function ResetPasswordPage() {
     <div className="page-centered">
       <BrandMark size="sm" />
       <div className="card">
-        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Nouveau mot de passe pour {username}</h1>
+        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>{t('resetPassword.title', { username })}</h1>
         <form onSubmit={handleSubmit} className="form">
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder={t('resetPassword.passwordPlaceholder')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             minLength={8}
@@ -52,7 +54,7 @@ export default function ResetPasswordPage() {
           />
           <input
             type="password"
-            placeholder="Confirmer le mot de passe"
+            placeholder={t('resetPassword.confirmPasswordPlaceholder')}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             minLength={8}
@@ -60,7 +62,7 @@ export default function ResetPasswordPage() {
           />
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={submitting}>
-            {submitting ? '...' : 'Réinitialiser le mot de passe'}
+            {submitting ? '...' : t('resetPassword.submit')}
           </button>
         </form>
       </div>

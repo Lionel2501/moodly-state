@@ -1,10 +1,12 @@
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
 import BrandMark from '../components/BrandMark';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const { register } = useAuth();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -22,7 +24,7 @@ export default function RegisterPage() {
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
       setError(
-        Array.isArray(message) ? message.join(', ') : typeof message === 'string' ? message : "Inscription impossible",
+        Array.isArray(message) ? message.join(', ') : typeof message === 'string' ? message : t('register.genericError'),
       );
     } finally {
       setSubmitting(false);
@@ -34,7 +36,7 @@ export default function RegisterPage() {
       <div className="page-centered">
         <BrandMark size="sm" />
         <div className="card">
-          <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Presque prêt !</h1>
+          <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>{t('register.almostReady')}</h1>
           <p style={{ textAlign: 'center' }}>{message}</p>
         </div>
       </div>
@@ -45,34 +47,34 @@ export default function RegisterPage() {
     <div className="page-centered">
       <BrandMark size="sm" />
       <div className="card">
-        <h1 style={{ fontSize: 22, margin: 0 }}>Créer un compte</h1>
+        <h1 style={{ fontSize: 22, margin: 0 }}>{t('register.title')}</h1>
         <form onSubmit={handleSubmit} className="form">
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value.toLowerCase())}
-            placeholder="Nom d'utilisateur"
+            placeholder={t('register.usernamePlaceholder')}
             pattern="[a-z0-9_\-]{3,24}"
-            title="3 à 24 caractères : lettres minuscules, chiffres, _ ou -"
+            title={t('register.usernameTitleHint')}
             required
           />
           <p className="hint" style={{ textAlign: 'left', margin: '-4px 0 0' }}>
-            Il sera visible dans l'url que tu partages : domain/{username || 'username'}/code
+            {t('register.usernameUrlHint', { username: username || 'username' })}
           </p>
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t('register.emailPlaceholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={submitting}>
-            {submitting ? '...' : 'Créer mon compte'}
+            {submitting ? '...' : t('register.submit')}
           </button>
         </form>
         <p className="hint" style={{ marginTop: 16 }}>
-          <Link to="/login">J'ai déjà un compte</Link>
+          <Link to="/login">{t('register.alreadyHaveAccount')}</Link>
         </p>
       </div>
     </div>

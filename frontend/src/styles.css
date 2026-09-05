@@ -601,6 +601,40 @@ button[type='submit']:hover {
   margin: 6px 0 0;
 }
 
+.language-switcher {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3px;
+}
+
+.language-switcher-option {
+  min-height: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+}
+
+.language-switcher-option:hover {
+  border: none;
+  color: var(--text);
+}
+
+.language-switcher-option-active {
+  background: var(--secondary);
+  color: var(--surface);
+  border-radius: 10px;
+}
+
 /* Smaller screens: the login illustration and tagline ate too much height
    above the fold, pushing the form and guest-access buttons out of view. */
 @media (max-width: 480px) {

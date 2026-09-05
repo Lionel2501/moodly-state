@@ -1,10 +1,12 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
 import BrandMark from '../components/BrandMark';
 
 export default function SetPasswordPage() {
+  const { t } = useTranslation();
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
@@ -20,7 +22,7 @@ export default function SetPasswordPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
+      setError(t('setPassword.mismatch'));
       return;
     }
 
@@ -30,7 +32,7 @@ export default function SetPasswordPage() {
       navigate('/');
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
-      setError(typeof message === 'string' ? message : 'Lien invalide ou expiré');
+      setError(typeof message === 'string' ? message : t('setPassword.invalidOrExpired'));
     } finally {
       setSubmitting(false);
     }
@@ -40,11 +42,11 @@ export default function SetPasswordPage() {
     <div className="page-centered">
       <BrandMark size="sm" />
       <div className="card">
-        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>Choisis ton mot de passe, {username}</h1>
+        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>{t('setPassword.title', { username })}</h1>
         <form onSubmit={handleSubmit} className="form">
           <input
             type="password"
-            placeholder="Mot de passe"
+            placeholder={t('setPassword.passwordPlaceholder')}
             value={password}
             onChange={(e) => setPasswordValue(e.target.value)}
             minLength={8}
@@ -52,7 +54,7 @@ export default function SetPasswordPage() {
           />
           <input
             type="password"
-            placeholder="Confirmer le mot de passe"
+            placeholder={t('setPassword.confirmPasswordPlaceholder')}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             minLength={8}
@@ -60,7 +62,7 @@ export default function SetPasswordPage() {
           />
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={submitting}>
-            {submitting ? '...' : 'Activer mon compte'}
+            {submitting ? '...' : t('setPassword.submit')}
           </button>
         </form>
       </div>

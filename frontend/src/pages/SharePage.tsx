@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { createSharedState, fetchCategories, SharedStateDto, Step } from '../api/client';
+import { useTranslation } from 'react-i18next';
+import { CategoryEmotion, createSharedState, fetchCategories, SharedStateDto, Step } from '../api/client';
 import BrandMark from '../components/BrandMark';
+import { useCategoryTranslation } from '../i18n/categories';
 
 export default function SharePage() {
+  const { t } = useTranslation();
+  const { stepName, stepDescription, emotionLabel, stateStepName, stateFeeling } = useCategoryTranslation();
   const [steps, setSteps] = useState<Step[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStepId, setSelectedStepId] = useState<number | null>(null);
-  const [selectedFeeling, setSelectedFeeling] = useState<string | null>(null);
+  const [selectedEmotion, setSelectedEmotion] = useState<CategoryEmotion | null>(null);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<SharedStateDto | null>(null);
   const [copied, setCopied] = useState(false);
@@ -23,18 +27,18 @@ export default function SharePage() {
 
   function handleSelectStep(stepId: number) {
     setSelectedStepId(stepId || null);
-    setSelectedFeeling(null);
+    setSelectedEmotion(null);
   }
 
   async function handleConfirm() {
-    if (!step || !selectedFeeling) return;
+    if (!step || !selectedEmotion) return;
     setGenerating(true);
     setError(null);
     try {
-      const state = await createSharedState(step.id, selectedFeeling);
+      const state = await createSharedState(step.id, selectedEmotion.key);
       setResult(state);
     } catch {
-      setError('La génération a échoué, réessaie.');
+      setError(t('share.generationFailed'));
     } finally {
       setGenerating(false);
     }
@@ -59,18 +63,18 @@ export default function SharePage() {
         </header>
         <main className="content">
           <div className="card result-card">
-            <span className="public-category">{result.stepName}</span>
-            <h2 style={{ fontSize: 22, margin: 0 }}>{result.feeling}</h2>
-            <p className="hint">Ton code unique — partage-le pour que quelqu'un le découvre :</p>
+            <span className="public-category">{stateStepName(result.stepId, result.stepName)}</span>
+            <h2 style={{ fontSize: 22, margin: 0 }}>{stateFeeling(result.feeling)}</h2>
+            <p className="hint">{t('share.yourUniqueCode')}</p>
             <div className="state-url-row">
               <code className="state-url code-display">{result.code}</code>
-              <button onClick={copyCode}>{copied ? 'Copié !' : 'Copier'}</button>
+              <button onClick={copyCode}>{copied ? t('common.copied') : t('common.copy')}</button>
             </div>
             <Link to="/discover" className="button primary">
-              Aller à Discover
+              {t('share.goToDiscover')}
             </Link>
             <Link to="/login" className="button">
-              Retour à l'accueil
+              {t('common.backToHome')}
             </Link>
           </div>
         </main>
@@ -78,7 +82,7 @@ export default function SharePage() {
     );
   }
 
-  if (step && selectedFeeling) {
+  if (step && selectedEmotion) {
     return (
       <div className="page">
         <header className="topbar">
@@ -86,14 +90,14 @@ export default function SharePage() {
         </header>
         <main className="content">
           <div className="card result-card fade-in">
-            <span className="public-category">{step.name}</span>
-            <h2 style={{ fontSize: 22, margin: 0 }}>{selectedFeeling}</h2>
+            <span className="public-category">{stepName(step)}</span>
+            <h2 style={{ fontSize: 22, margin: 0 }}>{emotionLabel(selectedEmotion)}</h2>
             {error && <p className="error">{error}</p>}
             <button className="button primary" disabled={generating} onClick={handleConfirm}>
-              {generating ? 'Génération...' : 'Confirmer'}
+              {generating ? t('share.generating') : t('share.confirm')}
             </button>
-            <button disabled={generating} onClick={() => setSelectedFeeling(null)}>
-              Changer d'état
+            <button disabled={generating} onClick={() => setSelectedEmotion(null)}>
+              {t('share.changeState')}
             </button>
           </div>
         </main>
@@ -107,10 +111,10 @@ export default function SharePage() {
         <BrandMark size="sm" inline />
       </header>
       <main className="content">
-        {loading && <p className="hint">Chargement...</p>}
+        {loading && <p className="hint">{t('common.loading')}</p>}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span className="section-label">Catégorie</span>
+          <span className="section-label">{t('share.category')}</span>
           <div className="category-grid">
             {steps.map((s) => (
               <button
@@ -121,8 +125,8 @@ export default function SharePage() {
                 onClick={() => handleSelectStep(s.id === selectedStepId ? 0 : s.id)}
               >
                 <span className="category-button-text">
-                  <span className="category-button-name">{s.name}</span>
-                  <span className="category-button-description">{s.description}</span>
+                  <span className="category-button-name">{stepName(s)}</span>
+                  <span className="category-button-description">{stepDescription(s)}</span>
                 </span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 18l6-6-6-6" />
@@ -134,15 +138,15 @@ export default function SharePage() {
 
         {step && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <span className="section-label">Sous-catégorie</span>
+            <span className="section-label">{t('share.subcategory')}</span>
             <div className="category-grid">
               {step.emotions.map((emotion) => (
                 <button
                   key={emotion.key}
                   className="button category-button"
-                  onClick={() => setSelectedFeeling(emotion.label)}
+                  onClick={() => setSelectedEmotion(emotion)}
                 >
-                  {emotion.label}
+                  {emotionLabel(emotion)}
                   <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18l6-6-6-6" />
                   </svg>
