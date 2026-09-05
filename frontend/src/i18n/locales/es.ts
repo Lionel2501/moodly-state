@@ -83,7 +83,7 @@ const es: typeof fr = {
     confirm: 'Confirmar',
     changeState: 'Cambiar de estado',
     generationFailed: 'La generación falló, inténtalo de nuevo.',
-    yourUniqueCode: 'Tu código único — compártelo para que alguien lo descubra:',
+    yourUniqueLink: 'Tu enlace único — compártelo para que alguien lo descubra:',
     goToDiscover: 'Ir a Discover',
   },
   discover: {

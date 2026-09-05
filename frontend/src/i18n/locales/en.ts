@@ -83,7 +83,7 @@ const en: typeof fr = {
     confirm: 'Confirm',
     changeState: 'Change state',
     generationFailed: 'Generation failed, try again.',
-    yourUniqueCode: 'Your unique code — share it so someone can discover it:',
+    yourUniqueLink: 'Your unique link — share it so someone can discover it:',
     goToDiscover: 'Go to Discover',
   },
   discover: {

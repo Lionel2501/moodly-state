@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { isAxiosError } from 'axios';
 import { discoverSharedState, SharedStateDto } from '../api/client';
@@ -9,7 +9,8 @@ import { useCategoryTranslation } from '../i18n/categories';
 export default function DiscoverPage() {
   const { t } = useTranslation();
   const { stateStepName, stateFeeling } = useCategoryTranslation();
-  const [code, setCode] = useState('');
+  const { code: codeFromUrl } = useParams<{ code?: string }>();
+  const [code, setCode] = useState(codeFromUrl ?? '');
   const [result, setResult] = useState<SharedStateDto | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

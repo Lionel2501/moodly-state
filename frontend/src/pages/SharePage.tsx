@@ -19,6 +19,10 @@ export default function SharePage() {
 
   const step = steps.find((s) => s.id === selectedStepId) ?? null;
 
+  function discoverUrl(code: string) {
+    return `${window.location.origin}/discover/${code}`;
+  }
+
   useEffect(() => {
     fetchCategories()
       .then(setSteps)
@@ -47,7 +51,7 @@ export default function SharePage() {
   async function copyCode() {
     if (!result) return;
     try {
-      await navigator.clipboard.writeText(result.code);
+      await navigator.clipboard.writeText(discoverUrl(result.code));
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
@@ -65,12 +69,12 @@ export default function SharePage() {
           <div className="card result-card">
             <span className="public-category">{stateStepName(result.stepId, result.stepName)}</span>
             <h2 style={{ fontSize: 22, margin: 0 }}>{stateFeeling(result.feeling)}</h2>
-            <p className="hint">{t('share.yourUniqueCode')}</p>
+            <p className="hint">{t('share.yourUniqueLink')}</p>
             <div className="state-url-row">
-              <code className="state-url code-display">{result.code}</code>
+              <code className="state-url">{discoverUrl(result.code)}</code>
               <button onClick={copyCode}>{copied ? t('common.copied') : t('common.copy')}</button>
             </div>
-            <Link to="/discover" className="button primary">
+            <Link to={`/discover/${result.code}`} className="button primary">
               {t('share.goToDiscover')}
             </Link>
             <Link to="/login" className="button">

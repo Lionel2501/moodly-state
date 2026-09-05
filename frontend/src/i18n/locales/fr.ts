@@ -81,7 +81,7 @@ export default {
     confirm: 'Confirmer',
     changeState: "Changer d'état",
     generationFailed: "La génération a échoué, réessaie.",
-    yourUniqueCode: "Ton code unique — partage-le pour que quelqu'un le découvre :",
+    yourUniqueLink: "Ton lien unique — partage-le pour que quelqu'un le découvre :",
     goToDiscover: 'Aller à Discover',
   },
   discover: {
