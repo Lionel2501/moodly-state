@@ -195,15 +195,25 @@ export default function GeneratePage() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <span className="section-label">Catégorie</span>
-          <select value={selectedStepId ?? ''} onChange={(e) => handleSelectStep(Number(e.target.value))}>
-            <option value="">Choisis une catégorie</option>
+          <div className="category-grid">
             {steps.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
+              <button
+                key={s.id}
+                className={`button category-button${s.id === selectedStepId ? ' category-button-active' : ''}${
+                  selectedStepId && s.id !== selectedStepId ? ' category-button-collapsed' : ''
+                }`}
+                onClick={() => handleSelectStep(s.id === selectedStepId ? 0 : s.id)}
+              >
+                <span className="category-button-text">
+                  <span className="category-button-name">{s.name}</span>
+                  <span className="category-button-description">{s.description}</span>
+                </span>
+                <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
             ))}
-          </select>
-          {step && <p className="hint">{step.description}</p>}
+          </div>
         </div>
 
         {step && (

@@ -311,22 +311,6 @@ button[type='submit']:hover {
   position: relative;
 }
 
-select {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 13px 16px;
-  color: var(--text);
-  font-size: 15px;
-  font-family: inherit;
-  min-height: 44px;
-}
-
-select:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-}
-
 .user-search input {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -450,6 +434,19 @@ select:focus {
   margin: 0 0 -8px;
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 1000ms ease;
+}
+
 .category-grid {
   display: flex;
   flex-direction: column;
@@ -467,11 +464,32 @@ select:focus {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  max-height: 100px;
+  overflow: hidden;
+  transition: opacity 1000ms ease, max-height 0ms linear 0ms, padding 0ms linear 0ms, border-width 0ms linear 0ms,
+    border-color 200ms ease, background-color 200ms ease;
+}
+
+.category-button-collapsed {
+  min-height: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1000ms ease, max-height 0ms linear 1000ms, padding 0ms linear 1000ms, border-width 0ms linear 1000ms,
+    border-color 200ms ease, background-color 200ms ease;
 }
 
 .category-button .chevron {
   flex-shrink: 0;
   color: var(--accent);
+}
+
+.category-button-active {
+  border-color: var(--accent);
+  background: var(--bg);
 }
 
 .category-button-text {
