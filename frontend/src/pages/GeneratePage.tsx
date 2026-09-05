@@ -114,7 +114,7 @@ export default function GeneratePage() {
           <BrandMark size="sm" inline />
         </header>
         <main className="content">
-          <div className="card result-card">
+          <div className="card result-card fade-in">
             <span className="public-category">{step.name}</span>
             <h2 style={{ fontSize: 22, margin: 0 }}>{selectedFeeling}</h2>
 
@@ -183,12 +183,7 @@ export default function GeneratePage() {
   return (
     <div className="page">
       <header className="topbar">
-        <Link to="/" className="back-link">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          Choisis ton état
-        </Link>
+        <BrandMark size="sm" inline />
       </header>
       <main className="content">
         {loading && <p className="hint">Chargement...</p>}

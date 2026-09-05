@@ -30,11 +30,7 @@ export default function LoginPage() {
   return (
     <div className="page-centered">
       <BrandMark size="lg" />
-      <p className="tagline">
-        Ce que tu ressens,
-        <br />
-        <em>sans les mots</em>.
-      </p>
+      <p className="tagline">What about us</p>
 
       <svg className="illustration" viewBox="0 0 240 260" width="180" height="195" fill="none">
         <path
@@ -60,7 +56,19 @@ export default function LoginPage() {
         <circle cx="130" cy="14" r="7" fill="var(--accent)" />
       </svg>
 
-      <div className="card" style={{ marginTop: 8 }}>
+      <div className="card" style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <Link to="/share" className="button outline">
+            Partager une émotion
+          </Link>
+          <Link to="/discover" className="link-button" style={{ textAlign: 'center' }}>
+            Découvrir un état
+          </Link>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <span className="section-label">Connexion</span>
         <form onSubmit={handleSubmit} className="form">
           <input
             type="email"
@@ -84,22 +92,9 @@ export default function LoginPage() {
             {submitting ? '...' : 'Se connecter'}
           </button>
         </form>
-        <p className="hint" style={{ marginTop: 16 }}>
+        <p className="hint" style={{ margin: 0 }}>
           <Link to="/register">Créer un compte</Link>
         </p>
-
-        <div className="divider">
-          <span>ou, sans compte</span>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <Link to="/share" className="button outline">
-            Partager une émotion
-          </Link>
-          <Link to="/discover" className="link-button" style={{ textAlign: 'center' }}>
-            Découvrir un état
-          </Link>
-        </div>
       </div>
     </div>
   );

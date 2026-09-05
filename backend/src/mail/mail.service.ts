@@ -17,7 +17,7 @@ export class MailService {
     : null;
 
   private baseUrl(): string {
-    return (process.env.BASE_URL ?? 'https://moodly-state.vercel.app').replace(/\/$/, '');
+    return (process.env.BASE_URL ?? 'https://kanjoo.vercel.app').replace(/\/$/, '');
   }
 
   private async send(to: string, subject: string, html: string) {

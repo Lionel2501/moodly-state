@@ -15,7 +15,7 @@ export class StatesService {
   ) {}
 
   private buildUrl(username: string, code: string): string {
-    const baseUrl = (process.env.BASE_URL ?? 'http://localhost:5173').replace(/\/$/, '');
+    const baseUrl = (process.env.BASE_URL ?? 'https://kanjoo.vercel.app').replace(/\/$/, '');
     return `${baseUrl}/${username}/${code}`;
   }
 
