@@ -5,7 +5,7 @@ import { Request } from 'express';
 import { JwtPayload } from './jwt-payload';
 
 function cookieExtractor(req: Request): string | null {
-  const cookieName = process.env.COOKIE_NAME ?? 'linka_session';
+  const cookieName = process.env.COOKIE_NAME ?? 'kanjo_session';
   return req?.cookies?.[cookieName] ?? null;
 }
 
