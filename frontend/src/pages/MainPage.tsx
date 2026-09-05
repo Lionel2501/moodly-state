@@ -55,6 +55,9 @@ export default function MainPage() {
                 <div className="state-info">
                   <span className="state-step">{state.stepName}</span>
                   <span className="state-feeling">{state.feeling}</span>
+                  {state.aboutUser && (
+                    <span className="state-about">à propos de @{state.aboutUser.username}</span>
+                  )}
                 </div>
                 <div className="state-url-row">
                   <code className="state-url">{state.url}</code>

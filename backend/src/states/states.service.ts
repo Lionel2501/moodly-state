@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { nanoid } from 'nanoid';
 import { PrismaService } from '../prisma/prisma.service';
 import { CategoriesService } from '../categories/categories.service';
@@ -22,6 +22,17 @@ export class StatesService {
   async create(userId: string, username: string, dto: CreateStateDto) {
     const step = this.categoriesService.findFeeling(dto.stepId, dto.feeling);
 
+    let aboutUser: { id: string; username: string } | null = null;
+    if (dto.aboutUserId) {
+      aboutUser = await this.prisma.user.findUnique({
+        where: { id: dto.aboutUserId },
+        select: { id: true, username: true },
+      });
+      if (!aboutUser) {
+        throw new NotFoundException('Selected user not found');
+      }
+    }
+
     // The code only has to be unique for this user (the public URL is
     // {username}/{code}), so on the rare collision we just draw another one.
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
@@ -33,15 +44,36 @@ export class StatesService {
         continue;
       }
 
-      const state = await this.prisma.moodState.create({
-        data: {
-          userId,
-          code,
-          stepId: step.id,
-          stepName: step.name,
-          feeling: dto.feeling,
-        },
-      });
+      // A creator can only have one state about a given person at a time —
+      // associating a new one to someone who already has one replaces it.
+      const state = aboutUser
+        ? await this.prisma.moodState.upsert({
+            where: { userId_aboutUserId: { userId, aboutUserId: aboutUser.id } },
+            update: {
+              code,
+              stepId: step.id,
+              stepName: step.name,
+              feeling: dto.feeling,
+              createdAt: new Date(),
+            },
+            create: {
+              userId,
+              code,
+              stepId: step.id,
+              stepName: step.name,
+              feeling: dto.feeling,
+              aboutUserId: aboutUser.id,
+            },
+          })
+        : await this.prisma.moodState.create({
+            data: {
+              userId,
+              code,
+              stepId: step.id,
+              stepName: step.name,
+              feeling: dto.feeling,
+            },
+          });
 
       return {
         id: state.id,
@@ -51,6 +83,7 @@ export class StatesService {
         feeling: state.feeling,
         createdAt: state.createdAt,
         url: this.buildUrl(username, state.code),
+        aboutUser,
       };
     }
 
@@ -61,6 +94,7 @@ export class StatesService {
     const states = await this.prisma.moodState.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
+      include: { aboutUser: { select: { id: true, username: true } } },
     });
 
     return states.map((state) => ({
@@ -71,6 +105,7 @@ export class StatesService {
       feeling: state.feeling,
       createdAt: state.createdAt,
       url: this.buildUrl(username, state.code),
+      aboutUser: state.aboutUser,
     }));
   }
 }

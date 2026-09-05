@@ -87,6 +87,19 @@ export default function LoginPage() {
         <p className="hint" style={{ marginTop: 16 }}>
           <Link to="/register">Créer un compte</Link>
         </p>
+
+        <div className="divider">
+          <span>ou, sans compte</span>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <Link to="/share" className="button outline">
+            Partager une émotion
+          </Link>
+          <Link to="/discover" className="link-button" style={{ textAlign: 'center' }}>
+            Découvrir un état
+          </Link>
+        </div>
       </div>
     </div>
   );
