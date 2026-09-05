@@ -85,8 +85,7 @@ export default {
     goToDiscover: 'Aller à Discover',
   },
   discover: {
-    tagline: "Découvre la valeur d'un état",
-    codePlaceholder: 'Code unique',
+    explainPrompt: 'Ta relation souhaite partager un Kanjo avec toi.',
     submit: 'Découvrir',
     codeNotFound: 'Code introuvable.',
     genericError: 'Une erreur est survenue.',

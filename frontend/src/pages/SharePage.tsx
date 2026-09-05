@@ -118,7 +118,6 @@ export default function SharePage() {
         {loading && <p className="hint">{t('common.loading')}</p>}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <span className="section-label">{t('share.category')}</span>
           <div className="category-grid">
             {steps.map((s) => (
               <button
@@ -142,7 +141,6 @@ export default function SharePage() {
 
         {step && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <span className="section-label">{t('share.subcategory')}</span>
             <div className="category-grid">
               {step.emotions.map((emotion) => (
                 <button

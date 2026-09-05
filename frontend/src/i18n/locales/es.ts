@@ -87,8 +87,7 @@ const es: typeof fr = {
     goToDiscover: 'Ir a Discover',
   },
   discover: {
-    tagline: 'Descubre el valor de un estado',
-    codePlaceholder: 'Código único',
+    explainPrompt: 'Tu relación quiere compartir un Kanjo contigo.',
     submit: 'Descubrir',
     codeNotFound: 'Código no encontrado.',
     genericError: 'Ha ocurrido un error.',

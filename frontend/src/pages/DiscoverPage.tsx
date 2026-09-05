@@ -1,7 +1,7 @@
-import { FormEvent, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { isAxiosError } from 'axios';
+import { useState } from 'react';
 import { discoverSharedState, SharedStateDto } from '../api/client';
 import BrandMark from '../components/BrandMark';
 import { useCategoryTranslation } from '../i18n/categories';
@@ -9,15 +9,13 @@ import { useCategoryTranslation } from '../i18n/categories';
 export default function DiscoverPage() {
   const { t } = useTranslation();
   const { stateStepName, stateFeeling } = useCategoryTranslation();
-  const { code: codeFromUrl } = useParams<{ code?: string }>();
-  const [code, setCode] = useState(codeFromUrl ?? '');
+  const { code } = useParams<{ code?: string }>();
   const [result, setResult] = useState<SharedStateDto | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!code.trim()) return;
+  async function handleDiscover() {
+    if (!code) return;
     setLoading(true);
     setError(null);
     setResult(null);
@@ -38,25 +36,26 @@ export default function DiscoverPage() {
   return (
     <div className="page-centered">
       <BrandMark size="lg" />
-      <p className="tagline">{t('discover.tagline')}</p>
 
       <div className="card" style={{ marginTop: 8 }}>
-        <form onSubmit={handleSubmit} className="form">
-          <input
-            type="text"
-            placeholder={t('discover.codePlaceholder')}
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            required
-          />
-          {error && <p className="error">{error}</p>}
-          <button type="submit" disabled={loading}>
-            {loading ? '...' : t('discover.submit')}
-          </button>
-        </form>
+        {!result && (
+          <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <p className="tagline">{t('discover.explainPrompt')}</p>
+            {error && <p className="error">{error}</p>}
+            <button
+              type="button"
+              className="button primary"
+              style={{ width: '100%' }}
+              disabled={loading || !code}
+              onClick={handleDiscover}
+            >
+              {loading ? '...' : t('discover.submit')}
+            </button>
+          </div>
+        )}
 
         {result && (
-          <div className="public-state-card" style={{ marginTop: 20 }}>
+          <div className="public-state-card fade-in">
             <span className="public-category">{stateStepName(result.stepId, result.stepName)}</span>
             <h2 className="public-feeling">{stateFeeling(result.feeling)}</h2>
           </div>
