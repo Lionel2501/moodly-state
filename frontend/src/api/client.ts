@@ -26,6 +26,16 @@ export interface MoodStateDto {
   aboutUser: UserSummary | null;
 }
 
+export interface ContactKanjoDto {
+  id: string;
+  user: UserSummary | null;
+  categoryId: number | null;
+  categoryName: string;
+  direction: 'sent' | 'received';
+  createdAt: string;
+  url: string;
+}
+
 export interface PublicStateDto {
   username: string;
   categoryId: number | null;
@@ -91,9 +101,13 @@ export async function fetchCategories() {
   return data.categories;
 }
 
-export async function fetchStates() {
-  const { data } = await api.get<MoodStateDto[]>('/states');
+export async function fetchContacts() {
+  const { data } = await api.get<ContactKanjoDto[]>('/states/contacts');
   return data;
+}
+
+export async function deleteState(id: string) {
+  await api.delete(`/states/${id}`);
 }
 
 export async function createState(categoryId: number, aboutUserId?: string) {
