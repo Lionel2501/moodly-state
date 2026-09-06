@@ -9,7 +9,7 @@ export default function LoginPage() {
   const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -19,7 +19,7 @@ export default function LoginPage() {
     setError(null);
     setSubmitting(true);
     try {
-      await login(email, password);
+      await login(username, password);
       navigate('/');
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
@@ -70,10 +70,10 @@ export default function LoginPage() {
         <span className="section-label">{t('login.connexion')}</span>
         <form onSubmit={handleSubmit} className="form">
           <input
-            type="email"
-            placeholder={t('login.emailPlaceholder')}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder={t('login.usernamePlaceholder')}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <input
