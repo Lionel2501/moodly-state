@@ -79,15 +79,15 @@ const en: typeof fr = {
     yourUniqueLink: 'Copy and paste this link to send your Kanjo:',
   },
   discover: {
-    explainPrompt: 'Your connection wants to share a Kanjo with you.',
-    submit: 'Discover',
+    explainPrompt: 'A Kanjo is waiting for you...',
+    submit: 'Open my Kanjo',
+    sharesWithYou: 'Your connection shares:',
     codeNotFound: 'Code not found.',
     genericError: 'Something went wrong.',
-    wantMore: 'want to go further?',
-    promoBefore: 'Kanjo helps you say what you feel,',
-    promoEmphasis: 'without the words',
-    promoAfter:
-      '— create your account to share your own Kanjos and let the people close to you discover them.',
+    wantMore: 'Join the community!',
+    promoBefore: 'Kanjo is a concept for sharing',
+    promoEmphasis: 'our feelings, intentions, or desires.',
+    promoAfter: '',
     createFreeAccount: 'Create my free account',
   },
   publicState: {

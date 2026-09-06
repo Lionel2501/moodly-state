@@ -77,15 +77,15 @@ export default {
     yourUniqueLink: 'Copie-colle ce lien pour envoyer ton Kanjo :',
   },
   discover: {
-    explainPrompt: 'Ta relation souhaite partager un Kanjo avec toi.',
-    submit: 'Découvrir',
+    explainPrompt: 'Un Kanjo t\'attend...',
+    submit: 'Ouvrir mon Kanjo',
+    sharesWithYou: 'Ta relation te partage :',
     codeNotFound: 'Code introuvable.',
     genericError: 'Une erreur est survenue.',
-    wantMore: "envie d'aller plus loin ?",
-    promoBefore: "Kanjo t'aide à dire ce que tu ressens,",
-    promoEmphasis: 'sans les mots',
-    promoAfter:
-      '— crée ton compte pour partager tes propres Kanjos et laisser les tiens les découvrir.',
+    wantMore: 'Rejoins la communauté !',
+    promoBefore: 'Kanjo est un concept pour partager',
+    promoEmphasis: 'nos sentiments, nos intentions, ou nos envies.',
+    promoAfter: '',
     createFreeAccount: 'Créer mon compte gratuitement',
   },
   publicState: {
