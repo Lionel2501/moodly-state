@@ -8,7 +8,8 @@ export const api = axios.create({
 export interface Category {
   id: number;
   slug: string;
-  name: string;
+  selectLabel: string;
+  selectedLabel: string;
 }
 
 export interface UserSummary {
@@ -60,8 +61,8 @@ export async function register(email: string) {
   return data.message;
 }
 
-export async function login(email: string, password: string) {
-  const { data } = await api.post<{ user: AuthUser }>('/auth/login', { email, password });
+export async function login(username: string, password: string) {
+  const { data } = await api.post<{ user: AuthUser }>('/auth/login', { username, password });
   return data.user;
 }
 

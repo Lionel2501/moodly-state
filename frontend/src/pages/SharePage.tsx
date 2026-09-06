@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Category, createSharedState, fetchCategories, SharedStateDto } from '../api/client';
 import BrandMark from '../components/BrandMark';
@@ -7,7 +7,8 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function SharePage() {
   const { t } = useTranslation();
-  const { categoryName, stateCategoryName } = useCategoryTranslation();
+  const navigate = useNavigate();
+  const { categoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -43,7 +44,7 @@ export default function SharePage() {
     try {
       await navigator.clipboard.writeText(discoverUrl(result.code));
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      setTimeout(() => navigate('/'), 2000);
     } catch {
       // clipboard API unavailable, ignore silently
     }
@@ -57,11 +58,8 @@ export default function SharePage() {
         </header>
         <main className="content content-center">
           <div className="card result-card">
-            <h2 style={{ fontSize: 22, margin: 0, textAlign: 'center' }}>
-              {stateCategoryName(result.categoryId, result.categoryName)}
-            </h2>
-            <p className="hint">{t('share.yourUniqueLink')}</p>
-            <p className="hint" style={{ fontStyle: 'italic' }}>{discoverUrl(result.code)}</p>
+            <p className="share-link-label">{t('share.yourUniqueLink')}</p>
+            <p className="hint" style={{ fontStyle: 'italic', margin: 0 }}>{discoverUrl(result.code)}</p>
             <button className="button primary gift-button" onClick={copyCode}>
               <svg
                 className="gift-icon"

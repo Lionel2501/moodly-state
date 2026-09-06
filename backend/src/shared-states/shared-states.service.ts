@@ -30,7 +30,7 @@ export class SharedStatesService {
         data: {
           code,
           categoryId: category.id,
-          categoryName: category.name,
+          categoryName: category.selectedLabel,
         },
       });
 

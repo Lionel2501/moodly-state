@@ -19,20 +19,6 @@ const CATEGORY_SLUGS_BY_ID: Record<number, string> = {
   10: 'sentimientos',
 };
 
-// Maps a category's `intensity` (0-100 — how strongly it signals emotional
-// investment) to a shade of red: pale and barely there at 0, a deep red at
-// 100. Same hue family as --accent so it reads as an intentional variation
-// of the app's existing accent color.
-export function categoryShade(intensity: number): { background: string; border: string } {
-  const clamped = Math.max(0, Math.min(100, intensity));
-  const bgLightness = 97 - (clamped / 100) * 22;
-  const borderLightness = 88 - (clamped / 100) * 48;
-  return {
-    background: `hsl(6, 60%, ${bgLightness}%)`,
-    border: `hsl(6, 60%, ${borderLightness}%)`,
-  };
-}
-
 export function useCategoryTranslation() {
   const { t } = useTranslation();
 

@@ -53,14 +53,14 @@ export class StatesService {
             update: {
               code,
               categoryId: category.id,
-              categoryName: category.name,
+              categoryName: category.selectedLabel,
               createdAt: new Date(),
             },
             create: {
               userId,
               code,
               categoryId: category.id,
-              categoryName: category.name,
+              categoryName: category.selectedLabel,
               aboutUserId: aboutUser.id,
             },
           })
@@ -69,7 +69,7 @@ export class StatesService {
               userId,
               code,
               categoryId: category.id,
-              categoryName: category.name,
+              categoryName: category.selectedLabel,
             },
           });
 
