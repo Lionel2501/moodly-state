@@ -74,6 +74,7 @@ export default {
     associating: 'Envoi du Kanjo...',
     generationFailed: "L'envoi du Kanjo a échoué, réessaie.",
     about: 'à propos de @{{username}}',
+    skipAssociation: "Créer sans l'associer à quelqu'un",
   },
   share: {
     chooseKanjo: 'Choisis un Kanjo à partager',

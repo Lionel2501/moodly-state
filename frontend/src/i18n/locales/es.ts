@@ -76,6 +76,7 @@ const es: typeof fr = {
     associating: 'Enviando el Kanjo...',
     generationFailed: 'El envío del Kanjo falló, inténtalo de nuevo.',
     about: 'sobre @{{username}}',
+    skipAssociation: 'Crear sin asociarlo a nadie',
   },
   share: {
     chooseKanjo: 'Elige un Kanjo para compartir',
