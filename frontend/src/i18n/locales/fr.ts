@@ -5,6 +5,7 @@ export default {
     copied: 'Copié !',
     backToHome: "Retour à l'accueil",
     cancel: 'Annuler',
+    back: 'Retour',
   },
   main: {
     generate: 'Envoyer un Kanjo',
@@ -21,7 +22,6 @@ export default {
   },
   login: {
     sharePrompt: 'Partager un Kanjo',
-    discoverPrompt: 'Découvrir un Kanjo',
     connexion: 'Connexion',
     emailPlaceholder: 'Email',
     passwordPlaceholder: 'Mot de passe',

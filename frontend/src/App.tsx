@@ -23,7 +23,6 @@ export default function App() {
 
         {/* Anonymous, account-free flow: pick a Kanjo, get a shareable code */}
         <Route path="/share" element={<SharePage />} />
-        <Route path="/discover" element={<DiscoverPage />} />
         <Route path="/discover/:code" element={<DiscoverPage />} />
 
         <Route element={<ProtectedRoute />}>

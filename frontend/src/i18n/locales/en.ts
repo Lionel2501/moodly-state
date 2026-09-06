@@ -7,6 +7,7 @@ const en: typeof fr = {
     copied: 'Copied!',
     backToHome: 'Back to home',
     cancel: 'Cancel',
+    back: 'Back',
   },
   main: {
     generate: 'Send a Kanjo',
@@ -23,7 +24,6 @@ const en: typeof fr = {
   },
   login: {
     sharePrompt: 'Share a Kanjo',
-    discoverPrompt: 'Discover a Kanjo',
     connexion: 'Log in',
     emailPlaceholder: 'Email',
     passwordPlaceholder: 'Password',

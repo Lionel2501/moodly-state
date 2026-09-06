@@ -11,7 +11,8 @@ export default function GeneratePage() {
   const { categoryName, stateCategoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [userStepDone, setUserStepDone] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserSummary | null>(null);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<MoodStateDto | null>(null);
   const [copied, setCopied] = useState(false);
@@ -20,8 +21,6 @@ export default function GeneratePage() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<UserSummary[]>([]);
   const [searching, setSearching] = useState(false);
-
-  const category = categories.find((c) => c.id === selectedCategoryId) ?? null;
 
   useEffect(() => {
     fetchCategories()
@@ -43,30 +42,37 @@ export default function GeneratePage() {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  // Associating to a known user notifies them directly, so there is nothing
-  // left to share manually — go straight back to the dashboard.
-  async function handleAssociate(user: UserSummary) {
-    if (!category) return;
-    setGenerating(true);
-    setError(null);
-    try {
-      await createState(category.id, user.id);
-      navigate('/');
-    } catch {
-      setError(t('generate.generationFailed'));
-    } finally {
-      setGenerating(false);
-    }
+  function pickUser(user: UserSummary) {
+    setSelectedUser(user);
+    setUserStepDone(true);
   }
 
+  function skipUser() {
+    setSelectedUser(null);
+    setUserStepDone(true);
+  }
+
+  function backToUserStep() {
+    setUserStepDone(false);
+    setSelectedUser(null);
+    setQuery('');
+    setResults([]);
+  }
+
+  // Associating to a known user notifies them directly, so there is nothing
+  // left to share manually — go straight back to the dashboard.
   // No recipient to notify, so the sender has to share the link themselves.
-  async function handleNoUser() {
-    if (!category) return;
+  async function handleSelectCategory(category: Category) {
     setGenerating(true);
     setError(null);
     try {
-      const state = await createState(category.id);
-      setResult(state);
+      if (selectedUser) {
+        await createState(category.id, selectedUser.id);
+        navigate('/');
+      } else {
+        const state = await createState(category.id);
+        setResult(state);
+      }
     } catch {
       setError(t('generate.generationFailed'));
     } finally {
@@ -113,27 +119,9 @@ export default function GeneratePage() {
       </header>
       <main className="content">
         {loading && <p className="hint">{t('common.loading')}</p>}
+        {error && <p className="error">{error}</p>}
 
-        <div className="category-section">
-          <span className="section-label">{t('generate.category')}</span>
-          <div className="category-grid">
-            {categories.map((c) => (
-              <button
-                key={c.id}
-                className="button category-button"
-                disabled={generating}
-                onClick={() => setSelectedCategoryId(c.id === selectedCategoryId ? null : c.id)}
-              >
-                <span className="category-button-name">{categoryName(c)}</span>
-                <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {category && (
+        {!userStepDone && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <span className="section-label">{t('generate.associateWith')}</span>
 
@@ -142,19 +130,17 @@ export default function GeneratePage() {
                 type="text"
                 placeholder={t('generate.searchUserPlaceholder')}
                 value={query}
-                disabled={generating}
                 onChange={(e) => setQuery(e.target.value)}
               />
-              {generating && <p className="hint">{t('generate.associating')}</p>}
-              {!generating && searching && <p className="hint">{t('generate.searching')}</p>}
-              {!generating && !searching && query.trim() && results.length === 0 && (
+              {searching && <p className="hint">{t('generate.searching')}</p>}
+              {!searching && query.trim() && results.length === 0 && (
                 <p className="hint">{t('generate.noUserFound')}</p>
               )}
-              {!generating && results.length > 0 && (
+              {!searching && results.length > 0 && (
                 <ul className="user-results">
                   {results.map((u) => (
                     <li key={u.id}>
-                      <button className="user-result-item" onClick={() => handleAssociate(u)}>
+                      <button className="user-result-item" onClick={() => pickUser(u)}>
                         @{u.username}
                       </button>
                     </li>
@@ -163,11 +149,38 @@ export default function GeneratePage() {
               )}
             </div>
 
-            <button className="link-button" disabled={generating} onClick={handleNoUser}>
+            <button className="link-button" onClick={skipUser}>
               {t('generate.skipAssociation')}
             </button>
+          </div>
+        )}
 
-            {error && <p className="error">{error}</p>}
+        {userStepDone && (
+          <div className="category-section">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span className="section-label">{t('generate.category')}</span>
+              <button className="link-button" disabled={generating} onClick={backToUserStep}>
+                {t('common.back')}
+              </button>
+            </div>
+            {selectedUser && (
+              <p className="hint">{t('generate.about', { username: selectedUser.username })}</p>
+            )}
+            <div className="category-grid">
+              {categories.map((c) => (
+                <button
+                  key={c.id}
+                  className="button category-button"
+                  disabled={generating}
+                  onClick={() => handleSelectCategory(c)}
+                >
+                  <span className="category-button-name">{categoryName(c)}</span>
+                  <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </main>

@@ -63,9 +63,6 @@ export default function LoginPage() {
           <Link to="/share" className="button outline">
             {t('login.sharePrompt')}
           </Link>
-          <Link to="/discover" className="link-button" style={{ textAlign: 'center' }}>
-            {t('login.discoverPrompt')}
-          </Link>
         </div>
       </div>
 
