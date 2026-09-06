@@ -40,12 +40,11 @@ model AuthToken {
 }
 
 model MoodState {
-  id        String   @id @default(uuid())
-  code      String
-  stepId    Int
-  stepName  String
-  feeling   String
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  code         String
+  categoryId   Int?
+  categoryName String
+  createdAt    DateTime @default(now())
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -72,10 +71,9 @@ model MoodState {
 // is the only handle on it, so it must be globally unique (unlike
 // MoodState.code, which only needs to be unique per owning user).
 model SharedState {
-  id        String   @id @default(uuid())
-  code      String   @unique
-  stepId    Int
-  stepName  String
-  feeling   String
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  code         String   @unique
+  categoryId   Int?
+  categoryName String
+  createdAt    DateTime @default(now())
 }
