@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import LanguageSwitcher from './components/LanguageSwitcher';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -16,7 +15,6 @@ import NotFoundPage from './pages/NotFoundPage';
 export default function App() {
   return (
     <>
-      <LanguageSwitcher />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
