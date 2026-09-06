@@ -1,36 +1,37 @@
 export interface Category {
   id: number;
   slug: string;
-  name: string;
+  // Shown to the user who is generating/sending a kanjo (the picker).
+  selectLabel: string;
+  // Shown to the user who discovers/receives the kanjo (the reveal). This is
+  // also what gets snapshotted onto a state at creation time (see
+  // categoryName in states.service.ts / shared-states.service.ts), so it's
+  // what a discoverer still sees for an old state even if this category is
+  // later removed from the list below.
+  selectedLabel: string;
+  // How strongly this category signals emotional investment, on a 0-100
+  // scale. Used by the frontend to tint the category with a shade of red —
+  // 0 stays neutral, 100 is the deepest red.
+  intensity: number;
 }
 
 // A single flat list of the emotional states a user can pick from — this
 // used to be grouped into steps with sub-categories underneath, but that
 // hierarchy was flattened into one list to be more understandable at a
 // glance. Ids are stable across the app's history (they're persisted on
-// created states), so existing entries must never be renumbered; only
-// append new ones.
+// created states), so existing entries must never be renumbered or reused;
+// only append new ones. Categories that no longer make sense are removed
+// from this list rather than renumbered — old states just keep showing
+// their snapshotted selectedLabel (see stateCategoryName).
 export const CATEGORIES: Category[] = [
-  { id: 1, slug: 'want_to_know_you', name: 'Envie de te connaître plus' },
-  { id: 2, slug: 'interested_in_you', name: "Tu m'intéresses" },
-  { id: 3, slug: 'want_to_understand_you', name: 'Envie de mieux te comprendre' },
-  { id: 4, slug: 'want_to_discover_you', name: 'Envie de découvrir qui tu es' },
-  { id: 5, slug: 'feel_connected', name: 'Je me sens connecté à toi' },
-  { id: 6, slug: 'feel_close_to_you', name: 'Je me sens proche de toi' },
-  { id: 7, slug: 'want_to_spend_time_together', name: 'Envie de passer du temps avec toi' },
-  { id: 8, slug: 'want_to_see_you_again', name: 'Envie de te revoir' },
-  { id: 9, slug: 'want_to_be_friends', name: "J'aimerais être ton ami" },
-  { id: 10, slug: 'want_to_keep_in_touch', name: 'Envie de garder contact' },
-  { id: 11, slug: 'like_you', name: 'Tu me plais' },
-  { id: 12, slug: 'feel_affection', name: "J'ai de l'affection pour toi" },
-  { id: 13, slug: 'miss_you', name: 'Tu me manques' },
-  { id: 14, slug: 'think_about_you', name: 'Je pense à toi' },
-  { id: 15, slug: 'feel_attracted', name: 'Je suis attiré par toi' },
-  { id: 16, slug: 'developing_feelings', name: 'Des sentiments commencent à apparaître' },
-  { id: 17, slug: 'need_space', name: "Besoin d'espace" },
-  { id: 18, slug: 'want_to_take_distance', name: 'Envie de prendre de la distance' },
-  { id: 19, slug: 'want_to_slow_down', name: 'Envie de ralentir' },
-  { id: 20, slug: 'not_ready', name: "Je ne suis pas prêt" },
-  { id: 21, slug: 'uncertain', name: 'Je ne sais pas ce que je ressens' },
-  { id: 22, slug: 'want_to_end_connection', name: 'Envie de mettre fin à la relation' },
+  { id: 1, slug: 'sympathie', selectLabel: 'Sympathie', selectedLabel: 'Je te trouve sympa', intensity: 10 },
+  { id: 2, slug: 'amistad', selectLabel: 'Amitié', selectedLabel: "J'aimerais être ton ami(e)", intensity: 15 },
+  { id: 3, slug: 'compania', selectLabel: 'Compagnie', selectedLabel: "J'aime passer du temps avec toi", intensity: 15 },
+  { id: 4, slug: 'cercania', selectLabel: 'Proximité', selectedLabel: 'Je me sens proche de toi', intensity: 5 },
+  { id: 5, slug: 'conexion', selectLabel: 'Connexion', selectedLabel: 'Je me sens connecté(e) à toi', intensity: 5 },
+  { id: 6, slug: 'interes', selectLabel: 'Intérêt', selectedLabel: 'Je pense à toi', intensity: 25 },
+  { id: 7, slug: 'extranar', selectLabel: 'Manque', selectedLabel: 'Tu me manques', intensity: 40 },
+  { id: 8, slug: 'atraccion', selectLabel: 'Attirance', selectedLabel: 'Je suis attiré(e) par toi', intensity: 20 },
+  { id: 9, slug: 'gusto', selectLabel: 'Tu me plais', selectedLabel: 'Tu me plais', intensity: 30 },
+  { id: 10, slug: 'sentimientos', selectLabel: 'Sentiments', selectedLabel: 'Des sentiments commencent à apparaître', intensity: 45 },
 ];
