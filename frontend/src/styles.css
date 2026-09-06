@@ -408,6 +408,34 @@ button[type='submit']:hover {
   white-space: normal;
 }
 
+.discover-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  text-align: center;
+  gap: 16px;
+}
+
+.discover-page-main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.discover-page-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
 .promo-suggestion {
   max-width: 400px;
   width: 100%;
@@ -715,6 +743,11 @@ button.small {
   .page-centered {
     padding: 20px 20px 32px;
     gap: 4px;
+  }
+
+  .discover-page {
+    padding: 20px 20px 24px;
+    gap: 12px;
   }
 
   .brand-lg {
