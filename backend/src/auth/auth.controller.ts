@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CurrentUser, CurrentUserPayload } from './decorators/current-user.decorator';
@@ -46,7 +47,7 @@ export class AuthController {
   }
 
   @Post('reset-password')
-  async resetPassword(@Body() dto: SetPasswordDto, @Res({ passthrough: true }) res: Response) {
+  async resetPassword(@Body() dto: ResetPasswordDto, @Res({ passthrough: true }) res: Response) {
     const { accessToken, user } = await this.authService.resetPassword(dto);
     this.setSessionCookie(res, accessToken);
     return { user };

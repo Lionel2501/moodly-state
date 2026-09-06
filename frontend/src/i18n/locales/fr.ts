@@ -26,9 +26,6 @@ export default {
   register: {
     almostReady: 'Presque prêt !',
     title: 'Créer un compte',
-    usernamePlaceholder: "Nom d'utilisateur",
-    usernameTitleHint: '3 à 24 caractères : lettres minuscules, chiffres, _ ou -',
-    usernameUrlHint: "Il sera visible dans l'url que tu partages : domain/{{username}}/code",
     emailPlaceholder: 'Email',
     submit: 'Créer mon compte',
     alreadyHaveAccount: "J'ai déjà un compte",
@@ -51,7 +48,10 @@ export default {
     submit: 'Réinitialiser le mot de passe',
   },
   setPassword: {
-    title: 'Choisis ton mot de passe, {{username}}',
+    title: "Choisis ton nom d'utilisateur et ton mot de passe",
+    usernamePlaceholder: "Nom d'utilisateur",
+    usernameTitleHint: '3 à 24 caractères : lettres minuscules, chiffres, _ ou -',
+    usernameUrlHint: "Il sera visible dans l'url que tu partages : domain/{{username}}/code",
     passwordPlaceholder: 'Mot de passe',
     confirmPasswordPlaceholder: 'Confirmer le mot de passe',
     mismatch: 'Les mots de passe ne correspondent pas',

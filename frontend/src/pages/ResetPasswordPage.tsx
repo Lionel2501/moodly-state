@@ -28,7 +28,7 @@ export default function ResetPasswordPage() {
 
     setSubmitting(true);
     try {
-      await resetPassword(username ?? '', token, password);
+      await resetPassword(token, password);
       navigate('/');
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;

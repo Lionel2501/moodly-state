@@ -28,9 +28,6 @@ const en: typeof fr = {
   register: {
     almostReady: 'Almost there!',
     title: 'Create an account',
-    usernamePlaceholder: 'Username',
-    usernameTitleHint: '3 to 24 characters: lowercase letters, digits, _ or -',
-    usernameUrlHint: "It will be visible in the url you share: domain/{{username}}/code",
     emailPlaceholder: 'Email',
     submit: 'Create my account',
     alreadyHaveAccount: 'I already have an account',
@@ -53,7 +50,10 @@ const en: typeof fr = {
     submit: 'Reset password',
   },
   setPassword: {
-    title: 'Choose your password, {{username}}',
+    title: 'Choose your username and password',
+    usernamePlaceholder: 'Username',
+    usernameTitleHint: '3 to 24 characters: lowercase letters, digits, _ or -',
+    usernameUrlHint: 'It will be visible in the url you share: domain/{{username}}/code',
     passwordPlaceholder: 'Password',
     confirmPasswordPlaceholder: 'Confirm password',
     mismatch: 'Passwords do not match',

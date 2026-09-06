@@ -24,13 +24,14 @@ export class StatesService {
 
     let aboutUser: { id: string; username: string } | null = null;
     if (dto.aboutUserId) {
-      aboutUser = await this.prisma.user.findUnique({
-        where: { id: dto.aboutUserId },
+      const found = await this.prisma.user.findFirst({
+        where: { id: dto.aboutUserId, username: { not: null } },
         select: { id: true, username: true },
       });
-      if (!aboutUser) {
+      if (!found) {
         throw new NotFoundException('Selected user not found');
       }
+      aboutUser = found as { id: string; username: string };
     }
 
     // The code only has to be unique for this user (the public URL is

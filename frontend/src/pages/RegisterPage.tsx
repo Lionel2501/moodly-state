@@ -8,7 +8,6 @@ import BrandMark from '../components/BrandMark';
 export default function RegisterPage() {
   const { t } = useTranslation();
   const { register } = useAuth();
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -19,7 +18,7 @@ export default function RegisterPage() {
     setError(null);
     setSubmitting(true);
     try {
-      const confirmation = await register(username, email);
+      const confirmation = await register(email);
       setMessage(confirmation);
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
@@ -49,18 +48,6 @@ export default function RegisterPage() {
       <div className="card">
         <h1 style={{ fontSize: 22, margin: 0 }}>{t('register.title')}</h1>
         <form onSubmit={handleSubmit} className="form">
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value.toLowerCase())}
-            placeholder={t('register.usernamePlaceholder')}
-            pattern="[a-z0-9_\-]{3,24}"
-            title={t('register.usernameTitleHint')}
-            required
-          />
-          <p className="hint" style={{ textAlign: 'left', margin: '-4px 0 0' }}>
-            {t('register.usernameUrlHint', { username: username || 'username' })}
-          </p>
           <input
             type="email"
             placeholder={t('register.emailPlaceholder')}

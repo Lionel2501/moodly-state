@@ -18,6 +18,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/inscription" element={<SetPasswordPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
         {/* Anonymous, account-free flow: pick a Kanjo, get a shareable code */}
@@ -30,8 +31,7 @@ export default function App() {
           <Route path="/generate" element={<GeneratePage />} />
         </Route>
 
-        {/* Must stay before the /:username/:code catch-all so it doesn't shadow these */}
-        <Route path="/:username/inscription" element={<SetPasswordPage />} />
+        {/* Must stay before the /:username/:code catch-all so it doesn't shadow this */}
         <Route path="/:username/reset-password" element={<ResetPasswordPage />} />
 
         {/* Catch-all: public state page, must stay last so it never shadows an app route */}

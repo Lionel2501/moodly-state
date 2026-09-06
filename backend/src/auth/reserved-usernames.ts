@@ -8,6 +8,7 @@ export const RESERVED_USERNAMES = new Set([
   'register',
   'logout',
   'forgot-password',
+  'inscription',
   'generate',
   'states',
   'categories',

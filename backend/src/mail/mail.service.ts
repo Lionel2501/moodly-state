@@ -36,12 +36,12 @@ export class MailService {
     });
   }
 
-  async sendSetPasswordEmail(to: string, username: string, token: string) {
-    const url = `${this.baseUrl()}/${username}/inscription?token=${token}`;
+  async sendSetPasswordEmail(to: string, token: string) {
+    const url = `${this.baseUrl()}/inscription?token=${token}`;
     await this.send(
       to,
-      'Bienvenue sur Kanjo — choisis ton mot de passe',
-      `<p>Bienvenue ${username} !</p><p>Choisis ton mot de passe pour activer ton compte :</p><p><a href="${url}">${url}</a></p>`,
+      'Bienvenue sur Kanjo — choisis ton nom d\'utilisateur et ton mot de passe',
+      `<p>Bienvenue !</p><p>Choisis ton nom d'utilisateur et ton mot de passe pour activer ton compte :</p><p><a href="${url}">${url}</a></p>`,
     );
   }
 

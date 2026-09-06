@@ -45,11 +45,8 @@ export interface AuthUser {
   username: string;
 }
 
-export async function register(username: string, email: string) {
-  const { data } = await api.post<{ message: string }>('/auth/register', {
-    username,
-    email,
-  });
+export async function register(email: string) {
+  const { data } = await api.post<{ message: string }>('/auth/register', { email });
   return data.message;
 }
 
@@ -58,18 +55,17 @@ export async function login(email: string, password: string) {
   return data.user;
 }
 
-export async function setPassword(username: string, token: string, password: string) {
+export async function setPassword(token: string, username: string, password: string) {
   const { data } = await api.post<{ user: AuthUser }>('/auth/set-password', {
-    username,
     token,
+    username,
     password,
   });
   return data.user;
 }
 
-export async function resetPassword(username: string, token: string, password: string) {
+export async function resetPassword(token: string, password: string) {
   const { data } = await api.post<{ user: AuthUser }>('/auth/reset-password', {
-    username,
     token,
     password,
   });

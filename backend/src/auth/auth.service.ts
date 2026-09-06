@@ -13,6 +13,7 @@ import { MailService } from '../mail/mail.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { SetPasswordDto } from './dto/set-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { RESERVED_USERNAMES } from './reserved-usernames';
 
@@ -28,29 +29,25 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    if (RESERVED_USERNAMES.has(dto.username.toLowerCase())) {
-      throw new ConflictException('This username is reserved, please choose another one');
-    }
-
-    const existing = await this.prisma.user.findFirst({
-      where: { OR: [{ email: dto.email }, { username: dto.username }] },
-    });
+    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (existing) {
-      throw new ConflictException('Email or username already in use');
+      throw new ConflictException('Email already in use');
     }
 
     const user = await this.prisma.user.create({
       data: {
-        username: dto.username,
         email: dto.email,
+        username: null,
         passwordHash: null,
       },
     });
 
     const token = await this.issueToken(user.id, 'SET_PASSWORD');
-    await this.mailService.sendSetPasswordEmail(user.email, user.username, token);
+    await this.mailService.sendSetPasswordEmail(user.email, token);
 
-    return { message: 'Compte créé, vérifie tes emails pour définir ton mot de passe' };
+    return {
+      message: "Compte créé, vérifie tes emails pour choisir ton nom d'utilisateur et ton mot de passe",
+    };
   }
 
   async login(dto: LoginDto) {
@@ -66,15 +63,15 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    return this.buildToken(user.id, user.username);
+    return this.buildToken(user.id, user.username!);
   }
 
   async setPassword(dto: SetPasswordDto) {
-    return this.completeToken(dto.username, dto.token, 'SET_PASSWORD', dto.password);
+    return this.completeToken(dto.token, 'SET_PASSWORD', dto.password, dto.username);
   }
 
-  async resetPassword(dto: SetPasswordDto) {
-    return this.completeToken(dto.username, dto.token, 'RESET_PASSWORD', dto.password);
+  async resetPassword(dto: ResetPasswordDto) {
+    return this.completeToken(dto.token, 'RESET_PASSWORD', dto.password);
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
@@ -91,22 +88,16 @@ export class AuthService {
   }
 
   private async completeToken(
-    username: string,
     rawToken: string,
     purpose: TokenPurpose,
     password: string,
+    newUsername?: string,
   ) {
-    const user = await this.prisma.user.findUnique({ where: { username } });
-    if (!user) {
-      throw new BadRequestException('Lien invalide ou expiré');
-    }
-
     const tokenHash = this.hashToken(rawToken);
     const authToken = await this.prisma.authToken.findUnique({ where: { tokenHash } });
 
     if (
       !authToken ||
-      authToken.userId !== user.id ||
       authToken.purpose !== purpose ||
       authToken.usedAt ||
       authToken.expiresAt < new Date()
@@ -115,12 +106,28 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-    await this.prisma.$transaction([
-      this.prisma.user.update({ where: { id: user.id }, data: { passwordHash } }),
+    let username: string | undefined;
+
+    if (purpose === 'SET_PASSWORD') {
+      username = (newUsername ?? '').toLowerCase();
+      if (RESERVED_USERNAMES.has(username)) {
+        throw new ConflictException('This username is reserved, please choose another one');
+      }
+      const existing = await this.prisma.user.findUnique({ where: { username } });
+      if (existing && existing.id !== authToken.userId) {
+        throw new ConflictException('Username already in use');
+      }
+    }
+
+    const [user] = await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: authToken.userId },
+        data: { passwordHash, ...(username ? { username } : {}) },
+      }),
       this.prisma.authToken.update({ where: { id: authToken.id }, data: { usedAt: new Date() } }),
     ]);
 
-    return this.buildToken(user.id, user.username);
+    return this.buildToken(user.id, user.username!);
   }
 
   private async issueToken(userId: string, purpose: TokenPurpose) {

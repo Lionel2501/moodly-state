@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { isAxiosError } from 'axios';
@@ -7,11 +7,11 @@ import BrandMark from '../components/BrandMark';
 
 export default function SetPasswordPage() {
   const { t } = useTranslation();
-  const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
   const { setPassword } = useAuth();
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
   const [password, setPasswordValue] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function SetPasswordPage() {
 
     setSubmitting(true);
     try {
-      await setPassword(username ?? '', token, password);
+      await setPassword(token, username, password);
       navigate('/');
     } catch (err) {
       const message = isAxiosError(err) ? err.response?.data?.message : null;
@@ -42,8 +42,20 @@ export default function SetPasswordPage() {
     <div className="page-centered">
       <BrandMark size="sm" />
       <div className="card">
-        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>{t('setPassword.title', { username })}</h1>
+        <h1 style={{ fontSize: 22, textAlign: 'center', margin: 0 }}>{t('setPassword.title')}</h1>
         <form onSubmit={handleSubmit} className="form">
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value.toLowerCase())}
+            placeholder={t('setPassword.usernamePlaceholder')}
+            pattern="[a-z0-9_\-]{3,24}"
+            title={t('setPassword.usernameTitleHint')}
+            required
+          />
+          <p className="hint" style={{ textAlign: 'left', margin: '-4px 0 0' }}>
+            {t('setPassword.usernameUrlHint', { username: username || 'username' })}
+          </p>
           <input
             type="password"
             placeholder={t('setPassword.passwordPlaceholder')}

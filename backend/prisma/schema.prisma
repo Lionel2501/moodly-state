@@ -15,7 +15,9 @@ enum TokenPurpose {
 
 model User {
   id           String      @id @default(uuid())
-  username     String      @unique
+  // Null until the user completes the emailed set-password step, where the
+  // username is chosen alongside the password.
+  username     String?     @unique
   email        String      @unique
   passwordHash String?
   createdAt    DateTime    @default(now())

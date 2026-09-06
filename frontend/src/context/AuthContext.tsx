@@ -21,9 +21,9 @@ interface AuthContextValue {
   user: AuthUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (username: string, email: string) => Promise<string>;
-  setPassword: (username: string, token: string, password: string) => Promise<void>;
-  resetPassword: (username: string, token: string, password: string) => Promise<void>;
+  register: (email: string) => Promise<string>;
+  setPassword: (token: string, username: string, password: string) => Promise<void>;
+  resetPassword: (token: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -45,17 +45,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(loggedInUser);
   }, []);
 
-  const register = useCallback(async (username: string, email: string) => {
-    return registerRequest(username, email);
+  const register = useCallback(async (email: string) => {
+    return registerRequest(email);
   }, []);
 
-  const setPassword = useCallback(async (username: string, token: string, password: string) => {
-    const loggedInUser = await setPasswordRequest(username, token, password);
+  const setPassword = useCallback(async (token: string, username: string, password: string) => {
+    const loggedInUser = await setPasswordRequest(token, username, password);
     setUser(loggedInUser);
   }, []);
 
-  const resetPassword = useCallback(async (username: string, token: string, password: string) => {
-    const loggedInUser = await resetPasswordRequest(username, token, password);
+  const resetPassword = useCallback(async (token: string, password: string) => {
+    const loggedInUser = await resetPasswordRequest(token, password);
     setUser(loggedInUser);
   }, []);
 
