@@ -87,6 +87,7 @@ export default {
   discover: {
     explainPrompt: 'Un Kanjo t\'attend...',
     submit: 'Ouvrir mon Kanjo',
+    revealing: 'Ouverture...',
     sharesWithYou: 'Ta relation te partage :',
     codeNotFound: 'Code introuvable.',
     genericError: 'Une erreur est survenue.',

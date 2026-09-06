@@ -14,15 +14,20 @@ export default function DiscoverPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const REVEAL_DELAY_MS = 1000;
+
   async function handleDiscover() {
     if (!code) return;
     setLoading(true);
     setError(null);
     setResult(null);
+    const startedAt = Date.now();
     try {
       const state = await discoverSharedState(code.trim());
+      await waitForRemainder(startedAt);
       setResult(state);
     } catch (err) {
+      await waitForRemainder(startedAt);
       setError(
         isAxiosError(err) && err.response?.status === 404
           ? t('discover.codeNotFound')
@@ -33,12 +38,17 @@ export default function DiscoverPage() {
     }
   }
 
+  function waitForRemainder(startedAt: number) {
+    const remaining = REVEAL_DELAY_MS - (Date.now() - startedAt);
+    return remaining > 0 ? new Promise((resolve) => setTimeout(resolve, remaining)) : Promise.resolve();
+  }
+
   return (
     <div className="discover-page">
       <BrandMark size="lg" />
 
       <div className="discover-page-main">
-        <div className="card">
+        <div className={`card ${loading ? 'card-anticipation' : ''}`}>
           {!result && (
             <div className="fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <p className="tagline text-center">{t('discover.explainPrompt')}</p>
@@ -51,7 +61,7 @@ export default function DiscoverPage() {
                 onClick={handleDiscover}
               >
                 <svg
-                  className="gift-icon"
+                  className={`gift-icon ${loading ? 'gift-icon-shake' : ''}`}
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
@@ -67,15 +77,19 @@ export default function DiscoverPage() {
                   <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
                   <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
                 </svg>
-                {loading ? '...' : t('discover.submit')}
+                {loading ? t('discover.revealing') : t('discover.submit')}
               </button>
             </div>
           )}
 
           {result && (
-            <div className="public-state-card text-center fade-in">
-              <p className="hint">{t('discover.sharesWithYou')}</p>
-              <h2 className="public-feeling">{stateCategoryName(result.categoryId, result.categoryName)}</h2>
+            <div className="public-state-card text-center reveal-pop">
+              <p className="hint text-fade-in" style={{ animationDelay: '150ms' }}>
+                {t('discover.sharesWithYou')}
+              </p>
+              <h2 className="public-feeling text-fade-in" style={{ animationDelay: '300ms' }}>
+                {stateCategoryName(result.categoryId, result.categoryName)}
+              </h2>
             </div>
           )}
 

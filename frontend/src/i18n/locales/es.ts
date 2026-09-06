@@ -89,6 +89,7 @@ const es: typeof fr = {
   discover: {
     explainPrompt: 'Un Kanjo te espera...',
     submit: 'Abrir mi Kanjo',
+    revealing: 'Abriendo...',
     sharesWithYou: 'Tu relación te comparte:',
     codeNotFound: 'Código no encontrado.',
     genericError: 'Ha ocurrido un error.',
