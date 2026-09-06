@@ -81,7 +81,7 @@ export class AuthService {
 
     if (user && user.passwordHash) {
       const token = await this.issueToken(user.id, 'RESET_PASSWORD');
-      await this.mailService.sendResetPasswordEmail(user.email, user.username, token);
+      await this.mailService.sendResetPasswordEmail(user.email, user.username!, token);
     }
 
     return { message: 'Si un compte existe, un email a été envoyé' };
