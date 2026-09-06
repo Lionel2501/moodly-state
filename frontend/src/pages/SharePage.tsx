@@ -10,13 +10,10 @@ export default function SharePage() {
   const { categoryName, stateCategoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<SharedStateDto | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const category = categories.find((c) => c.id === selectedCategoryId) ?? null;
 
   function discoverUrl(code: string) {
     return `${window.location.origin}/discover/${code}`;
@@ -28,8 +25,7 @@ export default function SharePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleConfirm() {
-    if (!category) return;
+  async function handleSelect(category: Category) {
     setGenerating(true);
     setError(null);
     try {
@@ -81,28 +77,6 @@ export default function SharePage() {
     );
   }
 
-  if (category) {
-    return (
-      <div className="page">
-        <header className="topbar">
-          <BrandMark size="sm" inline />
-        </header>
-        <main className="content content-center">
-          <div className="card result-card fade-in">
-            <h2 style={{ fontSize: 22, margin: 0 }}>{categoryName(category)}</h2>
-            {error && <p className="error">{error}</p>}
-            <button className="button primary" disabled={generating} onClick={handleConfirm}>
-              {generating ? t('share.generating') : t('share.confirm')}
-            </button>
-            <button disabled={generating} onClick={() => setSelectedCategoryId(null)}>
-              {t('share.changeState')}
-            </button>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="page">
       <header className="topbar">
@@ -110,6 +84,8 @@ export default function SharePage() {
       </header>
       <main className="content">
         {loading && <p className="hint">{t('common.loading')}</p>}
+        {generating && <p className="hint">{t('share.generating')}</p>}
+        {error && <p className="error">{error}</p>}
 
         <div className="category-section">
           <div className="category-grid">
@@ -117,7 +93,8 @@ export default function SharePage() {
               <button
                 key={c.id}
                 className="button category-button"
-                onClick={() => setSelectedCategoryId(c.id)}
+                disabled={generating}
+                onClick={() => handleSelect(c)}
               >
                 <span className="category-button-name">{categoryName(c)}</span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

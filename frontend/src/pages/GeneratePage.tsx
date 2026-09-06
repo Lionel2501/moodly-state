@@ -1,15 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  Category,
-  createState,
-  fetchCategories,
-  fetchStates,
-  MoodStateDto,
-  searchUsers,
-  UserSummary,
-} from '../api/client';
+import { Category, createState, fetchCategories, MoodStateDto, searchUsers, UserSummary } from '../api/client';
 import BrandMark from '../components/BrandMark';
 import { useCategoryTranslation } from '../i18n/categories';
 
@@ -27,14 +19,8 @@ export default function GeneratePage() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<UserSummary[]>([]);
   const [searching, setSearching] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<UserSummary | null>(null);
-  const [existingStates, setExistingStates] = useState<MoodStateDto[]>([]);
 
   const category = categories.find((c) => c.id === selectedCategoryId) ?? null;
-
-  useEffect(() => {
-    fetchStates().then(setExistingStates);
-  }, []);
 
   useEffect(() => {
     fetchCategories()
@@ -43,7 +29,7 @@ export default function GeneratePage() {
   }, []);
 
   useEffect(() => {
-    if (!query.trim() || selectedUser) {
+    if (!query.trim()) {
       setResults([]);
       return;
     }
@@ -54,20 +40,14 @@ export default function GeneratePage() {
         .finally(() => setSearching(false));
     }, 300);
     return () => clearTimeout(timeout);
-  }, [query, selectedUser]);
+  }, [query]);
 
-  function selectUser(u: UserSummary) {
-    setSelectedUser(u);
-    setQuery('');
-    setResults([]);
-  }
-
-  async function handleConfirm() {
-    if (!category || !selectedUser) return;
+  async function handleConfirm(user: UserSummary) {
+    if (!category) return;
     setGenerating(true);
     setError(null);
     try {
-      const state = await createState(category.id, selectedUser.id);
+      const state = await createState(category.id, user.id);
       setResult(state);
     } catch {
       setError(t('generate.generationFailed'));
@@ -115,7 +95,6 @@ export default function GeneratePage() {
   }
 
   if (category) {
-    const replacedState = existingStates.find((s) => s.aboutUser?.id === selectedUser?.id);
     return (
       <div className="page">
         <header className="topbar">
@@ -128,57 +107,34 @@ export default function GeneratePage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <span className="section-label">{t('generate.associateWith')}</span>
 
-              {selectedUser ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <div className="selected-user">
-                    <span className="selected-user-name">@{selectedUser.username}</span>
-                    <button className="link-button" onClick={() => setSelectedUser(null)}>
-                      {t('generate.change')}
-                    </button>
-                  </div>
-                  {replacedState && (
-                    <p className="hint">
-                      {t('generate.replacesCurrentState', {
-                        category: stateCategoryName(replacedState.categoryId, replacedState.categoryName),
-                      })}
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div className="user-search">
-                  <input
-                    type="text"
-                    placeholder={t('generate.searchUserPlaceholder')}
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                  {searching && <p className="hint">{t('generate.searching')}</p>}
-                  {!searching && query.trim() && results.length === 0 && (
-                    <p className="hint">{t('generate.noUserFound')}</p>
-                  )}
-                  {results.length > 0 && (
-                    <ul className="user-results">
-                      {results.map((u) => (
-                        <li key={u.id}>
-                          <button className="user-result-item" onClick={() => selectUser(u)}>
-                            @{u.username}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
+              <div className="user-search">
+                <input
+                  type="text"
+                  placeholder={t('generate.searchUserPlaceholder')}
+                  value={query}
+                  disabled={generating}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                {generating && <p className="hint">{t('generate.associating')}</p>}
+                {!generating && searching && <p className="hint">{t('generate.searching')}</p>}
+                {!generating && !searching && query.trim() && results.length === 0 && (
+                  <p className="hint">{t('generate.noUserFound')}</p>
+                )}
+                {!generating && results.length > 0 && (
+                  <ul className="user-results">
+                    {results.map((u) => (
+                      <li key={u.id}>
+                        <button className="user-result-item" onClick={() => handleConfirm(u)}>
+                          @{u.username}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
 
             {error && <p className="error">{error}</p>}
-            <button
-              className="button primary"
-              disabled={generating || !selectedUser}
-              onClick={handleConfirm}
-            >
-              {generating ? t('generate.associating') : t('generate.confirm')}
-            </button>
             <button disabled={generating} onClick={() => setSelectedCategoryId(null)}>
               {t('generate.changeState')}
             </button>
