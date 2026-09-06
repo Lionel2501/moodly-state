@@ -14,6 +14,7 @@ export default function MainPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -71,6 +72,11 @@ export default function MainPage() {
     }
   }
 
+  function toggleExpanded(contact: ContactKanjoDto) {
+    setExpandedId((prev) => (prev === contact.id ? null : contact.id));
+    setEditingId(null);
+  }
+
   return (
     <div className="page">
       <header className="topbar">
@@ -91,22 +97,44 @@ export default function MainPage() {
           <ul className="state-list">
             {contacts.map((contact) => (
               <li key={contact.id} className="contact-card">
-                <div className="contact-top">
-                  <div className="contact-identity">
-                    <div className="contact-avatar">{contact.user ? contact.user.username[0]?.toUpperCase() : '?'}</div>
-                    <span className={contact.user ? 'contact-username' : 'contact-username contact-username-unknown'}>
-                      {contact.user ? `@${contact.user.username}` : t('main.unknownUser')}
+                <button
+                  type="button"
+                  className="contact-toggle"
+                  onClick={() => toggleExpanded(contact)}
+                  aria-expanded={expandedId === contact.id}
+                >
+                  <div className="contact-top">
+                    <div className="contact-identity">
+                      <div className="contact-avatar">{contact.user ? contact.user.username[0]?.toUpperCase() : '?'}</div>
+                      <span className={contact.user ? 'contact-username' : 'contact-username contact-username-unknown'}>
+                        {contact.user ? `@${contact.user.username}` : t('main.unknownUser')}
+                      </span>
+                    </div>
+                    <span className={`contact-badge contact-badge-${contact.direction}`}>
+                      {t(contact.direction === 'sent' ? 'main.sent' : 'main.received')}
                     </span>
                   </div>
-                  <span className={`contact-badge contact-badge-${contact.direction}`}>
-                    {t(contact.direction === 'sent' ? 'main.sent' : 'main.received')}
-                  </span>
-                </div>
 
-                <p className="contact-kanjo">{stateCategoryName(contact.categoryId, contact.categoryName)}</p>
+                  <div className="contact-kanjo-row">
+                    <p className="contact-kanjo">{stateCategoryName(contact.categoryId, contact.categoryName)}</p>
+                    <svg
+                      className={`chevron contact-chevron ${expandedId === contact.id ? 'contact-chevron-open' : ''}`}
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </div>
+                </button>
 
-                {editingId !== contact.id && (
-                  <div className="contact-actions">
+                {expandedId === contact.id && editingId !== contact.id && (
+                  <div className="contact-actions fade-in">
                     {contact.direction === 'sent' && contact.user && (
                       <button className="button outline small" onClick={() => setEditingId(contact.id)}>
                         {t('main.change')}
@@ -136,7 +164,7 @@ export default function MainPage() {
                 )}
 
                 {editingId === contact.id && (
-                  <div className="category-grid category-grid-compact">
+                  <div className="category-grid category-grid-compact fade-in">
                     {categories.map((c) => (
                       <button
                         key={c.id}

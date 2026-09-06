@@ -612,13 +612,47 @@ button[type='submit']:hover {
   color: var(--secondary);
 }
 
+.contact-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  min-height: auto;
+  cursor: pointer;
+  text-align: left;
+}
+
+.contact-toggle:hover {
+  border: none;
+}
+
+.contact-kanjo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-left: 44px;
+}
+
 .contact-kanjo {
   margin: 0;
-  padding-left: 44px;
   font-family: 'Newsreader', serif;
   font-size: 18px;
   font-weight: 500;
   color: var(--text);
+}
+
+.contact-chevron {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 150ms ease;
+}
+
+.contact-chevron-open {
+  transform: rotate(180deg);
 }
 
 .contact-actions {
