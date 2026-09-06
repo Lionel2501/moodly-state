@@ -87,21 +87,62 @@ export class StatesService {
     throw new Error('Could not generate a unique code, please try again');
   }
 
-  async findAllForUser(userId: string, username: string) {
-    const states = await this.prisma.moodState.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-      include: { aboutUser: { select: { id: true, username: true } } },
+  // A "contact" is another user linked to the current one through a kanjo,
+  // in either direction: one I created about them, or one they created about me.
+  // A sent kanjo with no aboutUserId (created via "skip association") is still
+  // listed, with a null user — the frontend shows it as an unknown contact.
+  async findContacts(userId: string, username: string) {
+    const [sent, received] = await Promise.all([
+      this.prisma.moodState.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' },
+        include: { aboutUser: { select: { id: true, username: true } } },
+      }),
+      this.prisma.moodState.findMany({
+        where: { aboutUserId: userId },
+        orderBy: { createdAt: 'desc' },
+        include: { user: { select: { id: true, username: true } } },
+      }),
+    ]);
+
+    const sentContacts = sent.map((state) => {
+      const contactUser = state.aboutUser as { id: string; username: string } | null;
+      return {
+        id: state.id,
+        user: contactUser,
+        categoryId: state.categoryId,
+        categoryName: state.categoryName,
+        direction: 'sent' as const,
+        createdAt: state.createdAt,
+        url: this.buildUrl(username, state.code),
+      };
     });
 
-    return states.map((state) => ({
-      id: state.id,
-      code: state.code,
-      categoryId: state.categoryId,
-      categoryName: state.categoryName,
-      createdAt: state.createdAt,
-      url: this.buildUrl(username, state.code),
-      aboutUser: state.aboutUser,
-    }));
+    const receivedContacts = received.map((state) => {
+      const contactUser = state.user as { id: string; username: string };
+      return {
+        id: state.id,
+        user: contactUser,
+        categoryId: state.categoryId,
+        categoryName: state.categoryName,
+        direction: 'received' as const,
+        createdAt: state.createdAt,
+        url: this.buildUrl(contactUser.username, state.code),
+      };
+    });
+
+    return [...sentContacts, ...receivedContacts].sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+  }
+
+  // Only the creator can delete a kanjo — the userId filter also acts as the
+  // ownership check, so someone else's id here just yields a 404.
+  async remove(userId: string, id: string) {
+    const { count } = await this.prisma.moodState.deleteMany({ where: { id, userId } });
+    if (count === 0) {
+      throw new NotFoundException('Kanjo not found');
+    }
+    return { success: true };
   }
 }

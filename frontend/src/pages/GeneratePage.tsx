@@ -10,8 +10,8 @@ export default function GeneratePage() {
   const { categoryName, stateCategoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [associating, setAssociating] = useState(false);
   const [result, setResult] = useState<MoodStateDto | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,8 +19,6 @@ export default function GeneratePage() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<UserSummary[]>([]);
   const [searching, setSearching] = useState(false);
-
-  const category = categories.find((c) => c.id === selectedCategoryId) ?? null;
 
   useEffect(() => {
     fetchCategories()
@@ -42,17 +40,32 @@ export default function GeneratePage() {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  async function handleConfirm(user: UserSummary) {
-    if (!category) return;
+  async function handleGenerate(category: Category) {
     setGenerating(true);
     setError(null);
     try {
-      const state = await createState(category.id, user.id);
+      const state = await createState(category.id);
       setResult(state);
     } catch {
       setError(t('generate.generationFailed'));
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function handleAssociate(user: UserSummary) {
+    if (!result) return;
+    setAssociating(true);
+    setError(null);
+    try {
+      const state = await createState(result.categoryId ?? 0, user.id);
+      setResult(state);
+      setQuery('');
+      setResults([]);
+    } catch {
+      setError(t('generate.generationFailed'));
+    } finally {
+      setAssociating(false);
     }
   }
 
@@ -85,6 +98,41 @@ export default function GeneratePage() {
               <code className="state-url">{result.url}</code>
               <button onClick={copyUrl}>{copied ? t('common.copied') : t('common.copy')}</button>
             </div>
+
+            {!result.aboutUser && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <span className="section-label">{t('generate.associateWith')}</span>
+
+                <div className="user-search">
+                  <input
+                    type="text"
+                    placeholder={t('generate.searchUserPlaceholder')}
+                    value={query}
+                    disabled={associating}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                  {associating && <p className="hint">{t('generate.associating')}</p>}
+                  {!associating && searching && <p className="hint">{t('generate.searching')}</p>}
+                  {!associating && !searching && query.trim() && results.length === 0 && (
+                    <p className="hint">{t('generate.noUserFound')}</p>
+                  )}
+                  {!associating && results.length > 0 && (
+                    <ul className="user-results">
+                      {results.map((u) => (
+                        <li key={u.id}>
+                          <button className="user-result-item" onClick={() => handleAssociate(u)}>
+                            @{u.username}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                {error && <p className="error">{error}</p>}
+              </div>
+            )}
+
             <Link to="/" className="button primary">
               {t('common.backToHome')}
             </Link>
@@ -101,6 +149,7 @@ export default function GeneratePage() {
       </header>
       <main className="content">
         {loading && <p className="hint">{t('common.loading')}</p>}
+        {error && <p className="error">{error}</p>}
 
         <div className="category-section">
           <span className="section-label">{t('generate.category')}</span>
@@ -110,7 +159,7 @@ export default function GeneratePage() {
                 key={c.id}
                 className="button category-button"
                 disabled={generating}
-                onClick={() => setSelectedCategoryId(c.id === selectedCategoryId ? null : c.id)}
+                onClick={() => handleGenerate(c)}
               >
                 <span className="category-button-name">{categoryName(c)}</span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -120,40 +169,6 @@ export default function GeneratePage() {
             ))}
           </div>
         </div>
-
-        {category && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <span className="section-label">{t('generate.associateWith')}</span>
-
-            <div className="user-search">
-              <input
-                type="text"
-                placeholder={t('generate.searchUserPlaceholder')}
-                value={query}
-                disabled={generating}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              {generating && <p className="hint">{t('generate.associating')}</p>}
-              {!generating && searching && <p className="hint">{t('generate.searching')}</p>}
-              {!generating && !searching && query.trim() && results.length === 0 && (
-                <p className="hint">{t('generate.noUserFound')}</p>
-              )}
-              {!generating && results.length > 0 && (
-                <ul className="user-results">
-                  {results.map((u) => (
-                    <li key={u.id}>
-                      <button className="user-result-item" onClick={() => handleConfirm(u)}>
-                        @{u.username}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            {error && <p className="error">{error}</p>}
-          </div>
-        )}
       </main>
     </div>
   );
