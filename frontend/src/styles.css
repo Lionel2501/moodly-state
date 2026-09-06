@@ -511,26 +511,127 @@ button[type='submit']:hover {
   gap: 12px;
 }
 
-.state-card {
+.contact-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
-.state-info {
+.contact-top {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.state-feeling {
-  font-size: 17px;
+.contact-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.contact-avatar {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #e3e8dc;
+  color: var(--secondary);
   font-family: 'Newsreader', serif;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-username {
+  font-weight: 600;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-username-unknown {
   font-weight: 500;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.contact-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.contact-badge-sent {
+  background: rgba(184, 67, 58, 0.12);
+  color: var(--accent);
+}
+
+.contact-badge-received {
+  background: rgba(62, 90, 52, 0.14);
+  color: var(--secondary);
+}
+
+.contact-kanjo {
+  margin: 0;
+  padding-left: 44px;
+  font-family: 'Newsreader', serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.contact-actions {
+  display: flex;
+  gap: 8px;
+  padding-left: 44px;
+}
+
+.button.small,
+button.small {
+  padding: 8px 14px;
+  font-size: 13px;
+  min-height: 36px;
+}
+
+.icon-button {
+  padding: 8px 10px;
+  flex: none;
+}
+
+.icon-button-danger {
+  color: var(--danger);
+}
+
+.icon-button-danger:hover {
+  border-color: var(--danger);
+  background: rgba(156, 55, 48, 0.08);
+}
+
+.category-grid-compact {
+  gap: 6px;
+  margin-left: 44px;
+}
+
+.category-button-compact {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.category-button-compact .category-button-name {
+  font-size: 14px;
 }
 
 .state-url-row {
