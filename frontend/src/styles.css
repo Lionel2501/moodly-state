@@ -285,6 +285,27 @@ button[type='submit']:hover {
   color: var(--surface);
 }
 
+.gift-button {
+  gap: 10px;
+  border: 1.5px dashed rgba(251, 250, 246, 0.55);
+  box-shadow: 0 6px 16px rgba(184, 67, 58, 0.35);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.gift-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 20px rgba(184, 67, 58, 0.4);
+}
+
+.gift-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(184, 67, 58, 0.35);
+}
+
+.gift-icon {
+  flex-shrink: 0;
+}
+
 .link-button {
   background: none;
   border: none;

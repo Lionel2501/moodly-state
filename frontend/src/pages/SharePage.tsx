@@ -57,17 +57,31 @@ export default function SharePage() {
         </header>
         <main className="content content-center">
           <div className="card result-card">
-            <h2 style={{ fontSize: 22, margin: 0 }}>
+            <h2 style={{ fontSize: 22, margin: 0, textAlign: 'center' }}>
               {stateCategoryName(result.categoryId, result.categoryName)}
             </h2>
             <p className="hint">{t('share.yourUniqueLink')}</p>
-            <div className="state-url-row">
-              <code className="state-url">{discoverUrl(result.code)}</code>
-              <button onClick={copyCode}>{copied ? t('common.copied') : t('common.copy')}</button>
-            </div>
-            <Link to={`/discover/${result.code}`} className="button primary">
-              {t('share.goToDiscover')}
-            </Link>
+            <p className="hint" style={{ fontStyle: 'italic' }}>{discoverUrl(result.code)}</p>
+            <button className="button primary gift-button" onClick={copyCode}>
+              <svg
+                className="gift-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="9" rx="1.5" />
+                <path d="M3 11h18" />
+                <path d="M12 11v9" />
+                <path d="M12 11c-1-3.2-4.2-5-6.4-3.4-1.6 1.2-.6 3.4 1.4 3.4" />
+                <path d="M12 11c1-3.2 4.2-5 6.4-3.4 1.6 1.2.6 3.4-1.4 3.4" />
+              </svg>
+              {copied ? t('share.kanjoCopied') : t('share.copyKanjo')}
+            </button>
             <Link to="/login" className="button">
               {t('common.backToHome')}
             </Link>
@@ -87,6 +101,7 @@ export default function SharePage() {
         {error && <p className="error">{error}</p>}
 
         <div className="category-section">
+          <span className="section-label" style={{ marginBottom: 16 }}>{t('share.chooseKanjo')}</span>
           <div className="category-grid">
             {categories.map((c) => (
               <button

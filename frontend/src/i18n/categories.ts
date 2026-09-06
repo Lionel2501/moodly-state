@@ -34,7 +34,7 @@ export function useCategoryTranslation() {
   const { t } = useTranslation();
 
   function categoryName(category: Pick<Category, 'slug' | 'name'>): string {
-    return t(`emotions.${category.slug}`, { defaultValue: category.name });
+    return t(`kanjos.${category.slug}`, { defaultValue: category.name });
   }
 
   // For persisted states: categoryId is null for legacy records created
@@ -44,7 +44,7 @@ export function useCategoryTranslation() {
   function stateCategoryName(categoryId: number | null, fallbackName: string): string {
     const slug = categoryId ? CATEGORY_SLUGS_BY_ID[categoryId] : undefined;
     if (!slug) return fallbackName;
-    return t(`emotions.${slug}`, { defaultValue: fallbackName });
+    return t(`kanjos.${slug}`, { defaultValue: fallbackName });
   }
 
   return { categoryName, stateCategoryName };

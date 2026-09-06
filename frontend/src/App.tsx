@@ -20,7 +20,7 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        {/* Anonymous, account-free flow: pick an emotion, get a shareable code */}
+        {/* Anonymous, account-free flow: pick a Kanjo, get a shareable code */}
         <Route path="/share" element={<SharePage />} />
         <Route path="/discover" element={<DiscoverPage />} />
         <Route path="/discover/:code" element={<DiscoverPage />} />
