@@ -21,9 +21,8 @@ export class PublicController {
 
     return {
       username: user.username,
-      stepId: state.stepId,
-      stepName: state.stepName,
-      feeling: state.feeling,
+      categoryId: state.categoryId,
+      categoryName: state.categoryName,
       createdAt: state.createdAt,
     };
   }

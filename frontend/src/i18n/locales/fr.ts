@@ -60,10 +60,9 @@ export default {
   },
   generate: {
     category: 'Catégorie',
-    subcategory: 'Sous-catégorie',
     associateWith: 'Associer à',
     change: 'Changer',
-    replacesCurrentState: "Remplace l'état actuel : {{feeling}}",
+    replacesCurrentState: "Remplace l'état actuel : {{category}}",
     searchUserPlaceholder: 'Rechercher un utilisateur...',
     searching: 'Recherche...',
     noUserFound: 'Aucun utilisateur trouvé.',
@@ -75,7 +74,6 @@ export default {
   },
   share: {
     category: 'Catégorie',
-    subcategory: 'Sous-catégorie',
     change: 'Changer',
     generating: 'Génération...',
     confirm: 'Confirmer',
@@ -105,24 +103,6 @@ export default {
   notFound: {
     title: 'Page introuvable',
     hint: "Cette page n'existe pas.",
-  },
-  categories: {
-    debut: {
-      name: 'Début',
-      description: 'Le tout début — curiosité et première étincelle.',
-    },
-    rapprochement: {
-      name: 'Rapprochement',
-      description: 'On se rapproche — connexion, complicité, envie de se voir.',
-    },
-    relation: {
-      name: 'Relation',
-      description: "La relation s'installe — affection, attachement, sentiments.",
-    },
-    distance: {
-      name: 'Distance',
-      description: 'Besoin de prendre du recul, de ralentir ou de mettre fin.',
-    },
   },
   emotions: {
     want_to_know_you: 'Envie de te connaître plus',

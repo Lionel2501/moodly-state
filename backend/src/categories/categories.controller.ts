@@ -9,6 +9,6 @@ export class CategoriesController {
 
   @Get()
   findAll() {
-    return { steps: this.categoriesService.findAll() };
+    return { categories: this.categoriesService.findAll() };
   }
 }

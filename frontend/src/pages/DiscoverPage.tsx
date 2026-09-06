@@ -8,7 +8,7 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function DiscoverPage() {
   const { t } = useTranslation();
-  const { stateStepName, stateFeeling } = useCategoryTranslation();
+  const { stateCategoryName } = useCategoryTranslation();
   const { code } = useParams<{ code?: string }>();
   const [result, setResult] = useState<SharedStateDto | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -56,8 +56,7 @@ export default function DiscoverPage() {
 
         {result && (
           <div className="public-state-card fade-in">
-            <span className="public-category">{stateStepName(result.stepId, result.stepName)}</span>
-            <h2 className="public-feeling">{stateFeeling(result.feeling)}</h2>
+            <h2 className="public-feeling">{stateCategoryName(result.categoryId, result.categoryName)}</h2>
           </div>
         )}
 

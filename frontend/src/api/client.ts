@@ -5,17 +5,10 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-export interface CategoryEmotion {
-  key: string;
-  label: string;
-}
-
-export interface Step {
+export interface Category {
   id: number;
   slug: string;
   name: string;
-  description: string;
-  emotions: CategoryEmotion[];
 }
 
 export interface UserSummary {
@@ -26,9 +19,8 @@ export interface UserSummary {
 export interface MoodStateDto {
   id: string;
   code: string;
-  stepId: number;
-  stepName: string;
-  feeling: string;
+  categoryId: number | null;
+  categoryName: string;
   createdAt: string;
   url: string;
   aboutUser: UserSummary | null;
@@ -36,17 +28,15 @@ export interface MoodStateDto {
 
 export interface PublicStateDto {
   username: string;
-  stepId: number;
-  stepName: string;
-  feeling: string;
+  categoryId: number | null;
+  categoryName: string;
   createdAt: string;
 }
 
 export interface SharedStateDto {
   code: string;
-  stepId: number;
-  stepName: string;
-  feeling: string;
+  categoryId: number | null;
+  categoryName: string;
   createdAt: string;
 }
 
@@ -101,8 +91,8 @@ export async function fetchMe() {
 }
 
 export async function fetchCategories() {
-  const { data } = await api.get<{ steps: Step[] }>('/categories');
-  return data.steps;
+  const { data } = await api.get<{ categories: Category[] }>('/categories');
+  return data.categories;
 }
 
 export async function fetchStates() {
@@ -110,8 +100,8 @@ export async function fetchStates() {
   return data;
 }
 
-export async function createState(stepId: number, feeling: string, aboutUserId?: string) {
-  const { data } = await api.post<MoodStateDto>('/states', { stepId, feeling, aboutUserId });
+export async function createState(categoryId: number, aboutUserId?: string) {
+  const { data } = await api.post<MoodStateDto>('/states', { categoryId, aboutUserId });
   return data;
 }
 
@@ -125,8 +115,8 @@ export async function fetchPublicState(username: string, code: string) {
   return data;
 }
 
-export async function createSharedState(stepId: number, feeling: string) {
-  const { data } = await api.post<SharedStateDto>('/shared-states', { stepId, feeling });
+export async function createSharedState(categoryId: number) {
+  const { data } = await api.post<SharedStateDto>('/shared-states', { categoryId });
   return data;
 }
 

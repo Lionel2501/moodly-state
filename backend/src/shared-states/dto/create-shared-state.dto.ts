@@ -1,9 +1,6 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsInt } from 'class-validator';
 
 export class CreateSharedStateDto {
   @IsInt()
-  stepId!: number;
-
-  @IsString()
-  feeling!: string;
+  categoryId!: number;
 }

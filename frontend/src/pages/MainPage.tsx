@@ -8,7 +8,7 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function MainPage() {
   const { t } = useTranslation();
-  const { stateStepName, stateFeeling } = useCategoryTranslation();
+  const { stateCategoryName } = useCategoryTranslation();
   const { user, logout } = useAuth();
   const [states, setStates] = useState<MoodStateDto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,8 +55,7 @@ export default function MainPage() {
             {states.map((state) => (
               <li key={state.id} className="state-card">
                 <div className="state-info">
-                  <span className="state-step">{stateStepName(state.stepId, state.stepName)}</span>
-                  <span className="state-feeling">{stateFeeling(state.feeling)}</span>
+                  <span className="state-feeling">{stateCategoryName(state.categoryId, state.categoryName)}</span>
                   {state.aboutUser && (
                     <span className="state-about">
                       {t('main.about', { username: state.aboutUser.username })}

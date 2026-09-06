@@ -62,10 +62,9 @@ const en: typeof fr = {
   },
   generate: {
     category: 'Category',
-    subcategory: 'Subcategory',
     associateWith: 'Associate with',
     change: 'Change',
-    replacesCurrentState: 'Replaces the current state: {{feeling}}',
+    replacesCurrentState: 'Replaces the current state: {{category}}',
     searchUserPlaceholder: 'Search for a user...',
     searching: 'Searching...',
     noUserFound: 'No user found.',
@@ -77,7 +76,6 @@ const en: typeof fr = {
   },
   share: {
     category: 'Category',
-    subcategory: 'Subcategory',
     change: 'Change',
     generating: 'Generating...',
     confirm: 'Confirm',
@@ -107,24 +105,6 @@ const en: typeof fr = {
   notFound: {
     title: 'Page not found',
     hint: "This page doesn't exist.",
-  },
-  categories: {
-    debut: {
-      name: 'Beginning',
-      description: 'The very start — curiosity and first spark.',
-    },
-    rapprochement: {
-      name: 'Getting closer',
-      description: 'Growing closer — connection, closeness, wanting to see each other.',
-    },
-    relation: {
-      name: 'Relationship',
-      description: 'The relationship settles in — affection, attachment, feelings.',
-    },
-    distance: {
-      name: 'Distance',
-      description: 'Needing to step back, slow down, or end things.',
-    },
   },
   emotions: {
     want_to_know_you: 'Want to get to know you more',

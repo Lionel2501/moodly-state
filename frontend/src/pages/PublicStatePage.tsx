@@ -7,7 +7,7 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function PublicStatePage() {
   const { t } = useTranslation();
-  const { stateStepName, stateFeeling } = useCategoryTranslation();
+  const { stateCategoryName } = useCategoryTranslation();
   const { username, code } = useParams<{ username: string; code: string }>();
   const [state, setState] = useState<PublicStateDto | null>(null);
   const [notFound, setNotFound] = useState(false);
@@ -41,8 +41,7 @@ export default function PublicStatePage() {
       <p className="hint" style={{ marginTop: 24 }}>
         {t('publicState.sharesWithYou', { username: state.username })}
       </p>
-      <span className="public-category">{stateStepName(state.stepId, state.stepName)}</span>
-      <p className="public-feeling">{stateFeeling(state.feeling)}</p>
+      <p className="public-feeling">{stateCategoryName(state.categoryId, state.categoryName)}</p>
       <Link to="/register" className="button outline" style={{ width: '100%', maxWidth: 320, marginTop: 28 }}>
         {t('publicState.createMyKanjo')}
       </Link>

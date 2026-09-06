@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  CategoryEmotion,
+  Category,
   createState,
   fetchCategories,
   fetchStates,
   MoodStateDto,
   searchUsers,
-  Step,
   UserSummary,
 } from '../api/client';
 import BrandMark from '../components/BrandMark';
@@ -16,11 +15,10 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function GeneratePage() {
   const { t } = useTranslation();
-  const { stepName, stepDescription, emotionLabel, stateStepName, stateFeeling } = useCategoryTranslation();
-  const [steps, setSteps] = useState<Step[]>([]);
+  const { categoryName, stateCategoryName } = useCategoryTranslation();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedStepId, setSelectedStepId] = useState<number | null>(null);
-  const [selectedEmotion, setSelectedEmotion] = useState<CategoryEmotion | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<MoodStateDto | null>(null);
   const [copied, setCopied] = useState(false);
@@ -32,7 +30,7 @@ export default function GeneratePage() {
   const [selectedUser, setSelectedUser] = useState<UserSummary | null>(null);
   const [existingStates, setExistingStates] = useState<MoodStateDto[]>([]);
 
-  const step = steps.find((s) => s.id === selectedStepId) ?? null;
+  const category = categories.find((c) => c.id === selectedCategoryId) ?? null;
 
   useEffect(() => {
     fetchStates().then(setExistingStates);
@@ -40,7 +38,7 @@ export default function GeneratePage() {
 
   useEffect(() => {
     fetchCategories()
-      .then(setSteps)
+      .then(setCategories)
       .finally(() => setLoading(false));
   }, []);
 
@@ -64,17 +62,12 @@ export default function GeneratePage() {
     setResults([]);
   }
 
-  function handleSelectStep(stepId: number) {
-    setSelectedStepId(stepId || null);
-    setSelectedEmotion(null);
-  }
-
   async function handleConfirm() {
-    if (!step || !selectedEmotion || !selectedUser) return;
+    if (!category || !selectedUser) return;
     setGenerating(true);
     setError(null);
     try {
-      const state = await createState(step.id, selectedEmotion.key, selectedUser.id);
+      const state = await createState(category.id, selectedUser.id);
       setResult(state);
     } catch {
       setError(t('generate.generationFailed'));
@@ -102,8 +95,9 @@ export default function GeneratePage() {
         </header>
         <main className="content">
           <div className="card result-card">
-            <span className="public-category">{stateStepName(result.stepId, result.stepName)}</span>
-            <h2 style={{ fontSize: 22, margin: 0 }}>{stateFeeling(result.feeling)}</h2>
+            <h2 style={{ fontSize: 22, margin: 0 }}>
+              {stateCategoryName(result.categoryId, result.categoryName)}
+            </h2>
             {result.aboutUser && (
               <p className="hint">{t('generate.about', { username: result.aboutUser.username })}</p>
             )}
@@ -120,7 +114,7 @@ export default function GeneratePage() {
     );
   }
 
-  if (step && selectedEmotion) {
+  if (category) {
     const replacedState = existingStates.find((s) => s.aboutUser?.id === selectedUser?.id);
     return (
       <div className="page">
@@ -129,8 +123,7 @@ export default function GeneratePage() {
         </header>
         <main className="content">
           <div className="card result-card fade-in">
-            <span className="public-category">{stepName(step)}</span>
-            <h2 style={{ fontSize: 22, margin: 0 }}>{emotionLabel(selectedEmotion)}</h2>
+            <h2 style={{ fontSize: 22, margin: 0 }}>{categoryName(category)}</h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <span className="section-label">{t('generate.associateWith')}</span>
@@ -145,7 +138,9 @@ export default function GeneratePage() {
                   </div>
                   {replacedState && (
                     <p className="hint">
-                      {t('generate.replacesCurrentState', { feeling: stateFeeling(replacedState.feeling) })}
+                      {t('generate.replacesCurrentState', {
+                        category: stateCategoryName(replacedState.categoryId, replacedState.categoryName),
+                      })}
                     </p>
                   )}
                 </div>
@@ -184,7 +179,7 @@ export default function GeneratePage() {
             >
               {generating ? t('generate.associating') : t('generate.confirm')}
             </button>
-            <button disabled={generating} onClick={() => setSelectedEmotion(null)}>
+            <button disabled={generating} onClick={() => setSelectedCategoryId(null)}>
               {t('generate.changeState')}
             </button>
           </div>
@@ -201,21 +196,16 @@ export default function GeneratePage() {
       <main className="content">
         {loading && <p className="hint">{t('common.loading')}</p>}
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="category-section">
           <span className="section-label">{t('generate.category')}</span>
           <div className="category-grid">
-            {steps.map((s) => (
+            {categories.map((c) => (
               <button
-                key={s.id}
-                className={`button category-button${s.id === selectedStepId ? ' category-button-active' : ''}${
-                  selectedStepId && s.id !== selectedStepId ? ' category-button-collapsed' : ''
-                }`}
-                onClick={() => handleSelectStep(s.id === selectedStepId ? 0 : s.id)}
+                key={c.id}
+                className="button category-button"
+                onClick={() => setSelectedCategoryId(c.id)}
               >
-                <span className="category-button-text">
-                  <span className="category-button-name">{stepName(s)}</span>
-                  <span className="category-button-description">{stepDescription(s)}</span>
-                </span>
+                <span className="category-button-name">{categoryName(c)}</span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 18l6-6-6-6" />
                 </svg>
@@ -223,26 +213,6 @@ export default function GeneratePage() {
             ))}
           </div>
         </div>
-
-        {step && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <span className="section-label">{t('generate.subcategory')}</span>
-            <div className="category-grid">
-              {step.emotions.map((emotion) => (
-                <button
-                  key={emotion.key}
-                  className="button category-button"
-                  onClick={() => setSelectedEmotion(emotion)}
-                >
-                  {emotionLabel(emotion)}
-                  <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );

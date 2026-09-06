@@ -62,10 +62,9 @@ const es: typeof fr = {
   },
   generate: {
     category: 'Categoría',
-    subcategory: 'Subcategoría',
     associateWith: 'Asociar con',
     change: 'Cambiar',
-    replacesCurrentState: 'Reemplaza el estado actual: {{feeling}}',
+    replacesCurrentState: 'Reemplaza el estado actual: {{category}}',
     searchUserPlaceholder: 'Buscar un usuario...',
     searching: 'Buscando...',
     noUserFound: 'No se encontró ningún usuario.',
@@ -77,7 +76,6 @@ const es: typeof fr = {
   },
   share: {
     category: 'Categoría',
-    subcategory: 'Subcategoría',
     change: 'Cambiar',
     generating: 'Generando...',
     confirm: 'Confirmar',
@@ -107,24 +105,6 @@ const es: typeof fr = {
   notFound: {
     title: 'Página no encontrada',
     hint: 'Esta página no existe.',
-  },
-  categories: {
-    debut: {
-      name: 'Inicio',
-      description: 'El comienzo — curiosidad y primera chispa.',
-    },
-    rapprochement: {
-      name: 'Acercamiento',
-      description: 'Nos acercamos — conexión, complicidad, ganas de verse.',
-    },
-    relation: {
-      name: 'Relación',
-      description: 'La relación se afianza — afecto, apego, sentimientos.',
-    },
-    distance: {
-      name: 'Distancia',
-      description: 'Necesidad de tomar distancia, frenar o terminar.',
-    },
   },
   emotions: {
     want_to_know_you: 'Ganas de conocerte más',

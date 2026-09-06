@@ -15,7 +15,7 @@ export class SharedStatesService {
   ) {}
 
   async create(dto: CreateSharedStateDto) {
-    const step = this.categoriesService.findFeeling(dto.stepId, dto.feeling);
+    const category = this.categoriesService.findOne(dto.categoryId);
 
     // No owning user here, so the code has to be unique across the whole
     // table (unlike MoodState.code, which is only unique per user).
@@ -29,17 +29,15 @@ export class SharedStatesService {
       const state = await this.prisma.sharedState.create({
         data: {
           code,
-          stepId: step.id,
-          stepName: step.name,
-          feeling: dto.feeling,
+          categoryId: category.id,
+          categoryName: category.name,
         },
       });
 
       return {
         code: state.code,
-        stepId: state.stepId,
-        stepName: state.stepName,
-        feeling: state.feeling,
+        categoryId: state.categoryId,
+        categoryName: state.categoryName,
         createdAt: state.createdAt,
       };
     }
@@ -54,9 +52,8 @@ export class SharedStatesService {
     }
 
     return {
-      stepId: state.stepId,
-      stepName: state.stepName,
-      feeling: state.feeling,
+      categoryId: state.categoryId,
+      categoryName: state.categoryName,
       createdAt: state.createdAt,
     };
   }

@@ -20,7 +20,7 @@ export class StatesService {
   }
 
   async create(userId: string, username: string, dto: CreateStateDto) {
-    const step = this.categoriesService.findFeeling(dto.stepId, dto.feeling);
+    const category = this.categoriesService.findOne(dto.categoryId);
 
     let aboutUser: { id: string; username: string } | null = null;
     if (dto.aboutUserId) {
@@ -51,17 +51,15 @@ export class StatesService {
             where: { userId_aboutUserId: { userId, aboutUserId: aboutUser.id } },
             update: {
               code,
-              stepId: step.id,
-              stepName: step.name,
-              feeling: dto.feeling,
+              categoryId: category.id,
+              categoryName: category.name,
               createdAt: new Date(),
             },
             create: {
               userId,
               code,
-              stepId: step.id,
-              stepName: step.name,
-              feeling: dto.feeling,
+              categoryId: category.id,
+              categoryName: category.name,
               aboutUserId: aboutUser.id,
             },
           })
@@ -69,18 +67,16 @@ export class StatesService {
             data: {
               userId,
               code,
-              stepId: step.id,
-              stepName: step.name,
-              feeling: dto.feeling,
+              categoryId: category.id,
+              categoryName: category.name,
             },
           });
 
       return {
         id: state.id,
         code: state.code,
-        stepId: state.stepId,
-        stepName: state.stepName,
-        feeling: state.feeling,
+        categoryId: state.categoryId,
+        categoryName: state.categoryName,
         createdAt: state.createdAt,
         url: this.buildUrl(username, state.code),
         aboutUser,
@@ -100,9 +96,8 @@ export class StatesService {
     return states.map((state) => ({
       id: state.id,
       code: state.code,
-      stepId: state.stepId,
-      stepName: state.stepName,
-      feeling: state.feeling,
+      categoryId: state.categoryId,
+      categoryName: state.categoryName,
       createdAt: state.createdAt,
       url: this.buildUrl(username, state.code),
       aboutUser: state.aboutUser,
