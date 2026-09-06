@@ -60,6 +60,12 @@ h2,
 }
 
 /* Brand mark: icon + wordmark, reused across screens */
+.brand-link {
+  display: contents;
+  color: inherit;
+  text-decoration: none;
+}
+
 .brand {
   display: flex;
   flex-direction: column;
@@ -168,6 +174,10 @@ h2,
   display: flex;
   flex-direction: column;
   gap: 28px;
+}
+
+.content-center {
+  justify-content: center;
 }
 
 .card {
@@ -447,6 +457,14 @@ button[type='submit']:hover {
   animation: fade-in 1000ms ease;
 }
 
+.category-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
 .category-grid {
   display: flex;
   flex-direction: column;
@@ -464,22 +482,7 @@ button[type='submit']:hover {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  max-height: 100px;
-  overflow: hidden;
-  transition: opacity 1000ms ease, max-height 0ms linear 0ms, padding 0ms linear 0ms, border-width 0ms linear 0ms,
-    border-color 200ms ease, background-color 200ms ease;
-}
-
-.category-button-collapsed {
-  min-height: 0;
-  max-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  border-width: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1000ms ease, max-height 0ms linear 1000ms, padding 0ms linear 1000ms, border-width 0ms linear 1000ms,
-    border-color 200ms ease, background-color 200ms ease;
+  transition: border-color 200ms ease, background-color 200ms ease;
 }
 
 .category-button .chevron {
@@ -487,28 +490,10 @@ button[type='submit']:hover {
   color: var(--accent);
 }
 
-.category-button-active {
-  border-color: var(--accent);
-  background: var(--bg);
-}
-
-.category-button-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
 .category-button-name {
   font-family: 'Newsreader', serif;
   font-size: 16px;
   font-weight: 500;
-}
-
-.category-button-description {
-  font-family: 'Work Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--muted);
 }
 
 .state-list {
@@ -534,14 +519,6 @@ button[type='submit']:hover {
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
-
-.state-step {
-  color: var(--secondary-soft);
-  font-weight: 600;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .state-feeling {
@@ -582,16 +559,6 @@ button[type='submit']:hover {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 4px 16px 16px;
-}
-
-.public-category {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: block;
-  margin-top: 12px;
 }
 
 .public-feeling {
