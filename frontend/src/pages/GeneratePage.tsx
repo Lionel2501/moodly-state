@@ -94,56 +94,6 @@ export default function GeneratePage() {
     );
   }
 
-  if (category) {
-    return (
-      <div className="page">
-        <header className="topbar">
-          <BrandMark size="sm" inline />
-        </header>
-        <main className="content">
-          <div className="card result-card fade-in">
-            <h2 style={{ fontSize: 22, margin: 0 }}>{categoryName(category)}</h2>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <span className="section-label">{t('generate.associateWith')}</span>
-
-              <div className="user-search">
-                <input
-                  type="text"
-                  placeholder={t('generate.searchUserPlaceholder')}
-                  value={query}
-                  disabled={generating}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                {generating && <p className="hint">{t('generate.associating')}</p>}
-                {!generating && searching && <p className="hint">{t('generate.searching')}</p>}
-                {!generating && !searching && query.trim() && results.length === 0 && (
-                  <p className="hint">{t('generate.noUserFound')}</p>
-                )}
-                {!generating && results.length > 0 && (
-                  <ul className="user-results">
-                    {results.map((u) => (
-                      <li key={u.id}>
-                        <button className="user-result-item" onClick={() => handleConfirm(u)}>
-                          @{u.username}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-
-            {error && <p className="error">{error}</p>}
-            <button disabled={generating} onClick={() => setSelectedCategoryId(null)}>
-              {t('generate.changeState')}
-            </button>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="page">
       <header className="topbar">
@@ -159,7 +109,8 @@ export default function GeneratePage() {
               <button
                 key={c.id}
                 className="button category-button"
-                onClick={() => setSelectedCategoryId(c.id)}
+                disabled={generating}
+                onClick={() => setSelectedCategoryId(c.id === selectedCategoryId ? null : c.id)}
               >
                 <span className="category-button-name">{categoryName(c)}</span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -169,6 +120,40 @@ export default function GeneratePage() {
             ))}
           </div>
         </div>
+
+        {category && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <span className="section-label">{t('generate.associateWith')}</span>
+
+            <div className="user-search">
+              <input
+                type="text"
+                placeholder={t('generate.searchUserPlaceholder')}
+                value={query}
+                disabled={generating}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              {generating && <p className="hint">{t('generate.associating')}</p>}
+              {!generating && searching && <p className="hint">{t('generate.searching')}</p>}
+              {!generating && !searching && query.trim() && results.length === 0 && (
+                <p className="hint">{t('generate.noUserFound')}</p>
+              )}
+              {!generating && results.length > 0 && (
+                <ul className="user-results">
+                  {results.map((u) => (
+                    <li key={u.id}>
+                      <button className="user-result-item" onClick={() => handleConfirm(u)}>
+                        @{u.username}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {error && <p className="error">{error}</p>}
+          </div>
+        )}
       </main>
     </div>
   );

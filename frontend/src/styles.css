@@ -439,7 +439,7 @@ button[type='submit']:hover {
 }
 
 .fade-in {
-  animation: fade-in 1000ms ease;
+  animation: fade-in 200ms ease;
 }
 
 .category-section {

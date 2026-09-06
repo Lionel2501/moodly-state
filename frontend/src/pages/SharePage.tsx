@@ -84,7 +84,6 @@ export default function SharePage() {
       </header>
       <main className="content">
         {loading && <p className="hint">{t('common.loading')}</p>}
-        {generating && <p className="hint">{t('share.generating')}</p>}
         {error && <p className="error">{error}</p>}
 
         <div className="category-section">
