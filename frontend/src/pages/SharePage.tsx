@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Category, createSharedState, fetchCategories, SharedStateDto } from '../api/client';
 import BrandMark from '../components/BrandMark';
@@ -7,7 +7,6 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function SharePage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { categoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +43,7 @@ export default function SharePage() {
     try {
       await navigator.clipboard.writeText(discoverUrl(result.code));
       setCopied(true);
-      setTimeout(() => navigate('/'), 2000);
+      setTimeout(() => setCopied(false), 1500);
     } catch {
       // clipboard API unavailable, ignore silently
     }
