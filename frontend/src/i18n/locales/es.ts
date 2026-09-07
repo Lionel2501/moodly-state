@@ -29,7 +29,7 @@ const es: typeof fr = {
   login: {
     sharePrompt: 'Compartir un Kanjo',
     connexion: 'Iniciar sesión',
-    usernamePlaceholder: 'Nombre de usuario',
+    usernamePlaceholder: 'Nombre de usuario o email',
     passwordPlaceholder: 'Contraseña',
     forgotPassword: '¿Olvidaste tu contraseña?',
     submit: 'Iniciar sesión',

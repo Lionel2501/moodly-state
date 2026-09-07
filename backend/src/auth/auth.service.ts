@@ -51,7 +51,10 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({ where: { username: dto.username.toLowerCase() } });
+    const identifier = dto.username.toLowerCase();
+    const user = await this.prisma.user.findFirst({
+      where: { OR: [{ username: identifier }, { email: { equals: identifier, mode: 'insensitive' } }] },
+    });
     if (!user || !user.passwordHash) {
       throw new UnauthorizedException(
         !user ? 'Invalid credentials' : 'Compte pas encore activé, vérifie tes emails',

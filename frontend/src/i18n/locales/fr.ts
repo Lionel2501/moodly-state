@@ -27,7 +27,7 @@ export default {
   login: {
     sharePrompt: 'Partager un Kanjo',
     connexion: 'Connexion',
-    usernamePlaceholder: "Nom d'utilisateur",
+    usernamePlaceholder: "Nom d'utilisateur ou email",
     passwordPlaceholder: 'Mot de passe',
     forgotPassword: 'Mot de passe oublié ?',
     submit: 'Se connecter',
