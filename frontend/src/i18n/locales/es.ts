@@ -18,6 +18,7 @@ const es: typeof fr = {
     noContactsYet: 'Todavía no hay Kanjos — envía el primero.',
     sent: 'Enviado',
     received: 'Recibido',
+    read: 'Leído',
     change: 'Cambiar',
     unknownUser: 'Usuario desconocido',
     delete: 'Eliminar',

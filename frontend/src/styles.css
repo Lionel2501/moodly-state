@@ -717,6 +717,11 @@ button[type='submit']:hover {
   color: var(--secondary);
 }
 
+.contact-badge-read {
+  background: rgba(62, 90, 52, 0.14);
+  color: var(--secondary);
+}
+
 .contact-toggle {
   display: flex;
   flex-direction: column;

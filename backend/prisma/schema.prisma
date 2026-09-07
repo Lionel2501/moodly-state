@@ -47,6 +47,9 @@ model MoodState {
   categoryId   Int?
   categoryName String
   createdAt    DateTime @default(now())
+  // Flips to true the first time the recipient opens the public link — lets
+  // the sender's list distinguish "sent" from "read" (leído) for this kanjo.
+  checked      Boolean  @default(false)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

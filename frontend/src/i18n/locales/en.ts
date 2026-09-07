@@ -18,6 +18,7 @@ const en: typeof fr = {
     noContactsYet: 'No Kanjo yet — send your first one.',
     sent: 'Sent',
     received: 'Received',
+    read: 'Read',
     change: 'Change',
     unknownUser: 'Unknown user',
     delete: 'Delete',

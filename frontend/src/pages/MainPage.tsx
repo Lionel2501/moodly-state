@@ -110,8 +110,14 @@ export default function MainPage() {
                         {contact.user ? `@${contact.user.username}` : t('main.unknownUser')}
                       </span>
                     </div>
-                    <span className={`contact-badge contact-badge-${contact.direction}`}>
-                      {t(contact.direction === 'sent' ? 'main.sent' : 'main.received')}
+                    <span
+                      className={`contact-badge contact-badge-${
+                        contact.direction === 'sent' && contact.checked ? 'read' : contact.direction
+                      }`}
+                    >
+                      {contact.direction === 'sent'
+                        ? t(contact.checked ? 'main.read' : 'main.sent')
+                        : t('main.received')}
                     </span>
                   </div>
 

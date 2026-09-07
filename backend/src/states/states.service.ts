@@ -113,6 +113,7 @@ export class StatesService {
         categoryId: state.categoryId,
         categoryName: state.categoryName,
         direction: 'sent' as const,
+        checked: state.checked,
         createdAt: state.createdAt,
         url: this.buildUrl(username, state.code),
       };

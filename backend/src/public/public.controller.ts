@@ -19,6 +19,13 @@ export class PublicController {
       throw new NotFoundException('State not found');
     }
 
+    if (!state.checked) {
+      await this.prisma.moodState.update({
+        where: { id: state.id },
+        data: { checked: true },
+      });
+    }
+
     return {
       username: user.username,
       categoryId: state.categoryId,

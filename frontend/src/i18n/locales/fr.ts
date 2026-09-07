@@ -16,6 +16,7 @@ export default {
     noContactsYet: "Aucun Kanjo pour l'instant — envoie le premier.",
     sent: 'Envoyé',
     received: 'Reçu',
+    read: 'Lu',
     change: 'Changer',
     unknownUser: 'Utilisateur inconnu',
     delete: 'Supprimer',

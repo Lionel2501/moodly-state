@@ -33,6 +33,7 @@ export interface ContactKanjoDto {
   categoryId: number | null;
   categoryName: string;
   direction: 'sent' | 'received';
+  checked?: boolean;
   createdAt: string;
   url: string;
 }
