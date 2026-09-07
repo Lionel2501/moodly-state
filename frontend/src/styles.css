@@ -926,3 +926,129 @@ button.small {
   }
 }
 
+/* Main page: contacts sidebar + history panel (master-detail layout) */
+.main-layout {
+  flex: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 8px 24px 40px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.contacts-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.history-placeholder {
+  margin-top: 40px;
+}
+
+.thread-item {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  min-height: auto;
+}
+
+.thread-item-active {
+  border-color: var(--accent);
+}
+
+.thread-item-body {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.thread-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.thread-count {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: #e3e8dc;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.thread-item-preview {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-back {
+  display: none;
+}
+
+.history-entries .contact-kanjo-row,
+.history-entries .contact-actions {
+  padding-left: 0;
+}
+
+@media (max-width: 760px) {
+  .main-layout {
+    flex-direction: column;
+    padding: 8px 16px 40px;
+  }
+
+  .contacts-sidebar {
+    width: 100%;
+  }
+
+  .main-layout.has-selection .contacts-sidebar {
+    display: none;
+  }
+
+  .main-layout:not(.has-selection) .history-panel {
+    display: none;
+  }
+
+  .history-back {
+    display: inline-flex;
+  }
+}
+

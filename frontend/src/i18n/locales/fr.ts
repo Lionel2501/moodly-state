@@ -23,6 +23,9 @@ export default {
     confirmDelete: 'Supprimer ce Kanjo ?',
     about: 'à propos de @{{username}}',
     logout: 'Déconnexion',
+    selectContact: 'Sélectionne un contact pour voir l’historique.',
+    previewFakeData: 'Aperçu avec données fictives',
+    previewRealData: 'Revenir à mes données',
   },
   login: {
     sharePrompt: 'Partager un Kanjo',

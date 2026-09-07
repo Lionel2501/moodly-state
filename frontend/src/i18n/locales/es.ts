@@ -25,6 +25,9 @@ const es: typeof fr = {
     confirmDelete: '¿Eliminar este Kanjo?',
     about: 'sobre @{{username}}',
     logout: 'Cerrar sesión',
+    selectContact: 'Selecciona un contacto para ver el historial.',
+    previewFakeData: 'Vista previa con datos ficticios',
+    previewRealData: 'Volver a mis datos',
   },
   login: {
     sharePrompt: 'Compartir un Kanjo',
