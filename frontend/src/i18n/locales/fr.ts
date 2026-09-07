@@ -1,6 +1,6 @@
 export default {
   meta: {
-    title: 'Kanjoo — Partage tes sentiments',
+    title: 'Kanjoo - Partage tes sentiments',
   },
   common: {
     loading: 'Chargement...',

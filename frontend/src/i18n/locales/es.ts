@@ -2,7 +2,7 @@ import type fr from './fr';
 
 const es: typeof fr = {
   meta: {
-    title: 'Kanjoo — Comparte tus sentimientos',
+    title: 'Kanjoo - Comparte tus sentimientos',
   },
   common: {
     loading: 'Cargando...',
