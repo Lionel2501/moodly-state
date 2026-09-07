@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Category, createState, fetchCategories, MoodStateDto, searchUsers, UserSummary } from '../api/client';
 import BrandMark from '../components/BrandMark';
@@ -7,13 +7,13 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function GeneratePage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { categoryName, stateCategoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [userStepDone, setUserStepDone] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserSummary | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [result, setResult] = useState<MoodStateDto | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,26 +55,21 @@ export default function GeneratePage() {
   function backToUserStep() {
     setUserStepDone(false);
     setSelectedUser(null);
+    setSelectedCategoryId(null);
     setQuery('');
     setResults([]);
   }
 
-  // Associating to a known user notifies them directly, so there is nothing
-  // left to share manually — go straight back to the dashboard.
-  // No recipient to notify, so the sender has to share the link themselves.
   async function handleSelectCategory(category: Category) {
+    setSelectedCategoryId(category.id);
     setGenerating(true);
     setError(null);
     try {
-      if (selectedUser) {
-        await createState(category.id, selectedUser.id);
-        navigate('/');
-      } else {
-        const state = await createState(category.id);
-        setResult(state);
-      }
+      const state = await createState(category.id, selectedUser?.id);
+      setResult(state);
     } catch {
       setError(t('generate.generationFailed'));
+      setSelectedCategoryId(null);
     } finally {
       setGenerating(false);
     }
@@ -170,11 +165,15 @@ export default function GeneratePage() {
               {categories.map((c) => (
                 <button
                   key={c.id}
-                  className="button category-button"
+                  type="button"
+                  className={`button category-button ${selectedCategoryId === c.id ? 'category-button-selected' : ''}`}
                   disabled={generating}
                   onClick={() => handleSelectCategory(c)}
                 >
-                  <span className="category-button-name">{categoryName(c)}</span>
+                  <div className="category-button-text">
+                    <span className="category-button-name">{categoryName(c)}</span>
+                    <span className="category-button-preview">{stateCategoryName(c.id, c.selectedLabel)}</span>
+                  </div>
                   <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18l6-6-6-6" />
                   </svg>

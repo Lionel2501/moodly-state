@@ -1,6 +1,9 @@
 import type fr from './fr';
 
 const es: typeof fr = {
+  meta: {
+    title: 'Kanjoo — Comparte tus sentimientos',
+  },
   common: {
     loading: 'Cargando...',
     copy: 'Copiar',
@@ -120,6 +123,36 @@ const es: typeof fr = {
     atraccion: { select: 'Atracción', selected: 'Me siento atraído/a por ti' },
     gusto: { select: 'Me gustas', selected: 'Me gustas' },
     sentimientos: { select: 'Sentimientos', selected: 'Empiezan a surgir sentimientos' },
+
+    dispo_ce_soir: { select: '¿Libre esta noche?', selected: 'Estoy libre esta noche' },
+    on_se_voit: { select: '¿Nos vemos?', selected: 'Me gustaría verte' },
+    tu_fais_quoi: { select: '¿Qué haces?', selected: 'Tengo ganas de pasar un rato contigo' },
+    un_verre: { select: '¿Una copa?', selected: 'Me apetece tomar algo contigo' },
+    on_se_retrouve: { select: '¿Nos encontramos?', selected: 'Me gustaría que nos encontráramos' },
+
+    bon_moment: { select: 'Buen momento', selected: 'Pasé un buen momento contigo' },
+    a_refaire: { select: 'Repetir', selected: 'Me gustaría repetirlo contigo' },
+    jai_aime: { select: 'Me encantó', selected: 'Me encantó ese momento' },
+    merci_pour_ce_moment: { select: 'Gracias por ese momento', selected: 'Gracias por ese momento' },
+    encore: { select: '¿Otra vez?', selected: 'Me gustaría repetirlo' },
+
+    envie_de_te_parler: { select: 'Tengo ganas de hablar contigo', selected: 'Tenía ganas de hablar contigo' },
+    un_petit_message: { select: 'Un mensajito', selected: 'Tenía ganas de escribirte' },
+    donne_moi_de_tes_nouvelles: { select: 'Cuéntame cómo estás', selected: 'Me gustaría saber de ti' },
+    on_parle: { select: '¿Hablamos?', selected: 'Me gustaría charlar contigo' },
+    je_pense_a_toi_aujourdhui: { select: 'Hoy pienso en ti', selected: 'Hoy estuve pensando en ti' },
+
+    petit_coucou: { select: 'Un saludito', selected: 'Solo quería saludarte' },
+    ca_te_dit: { select: '¿Te apetece?', selected: 'Me apetece hacer algo contigo' },
+    partant: { select: '¿Te animas?', selected: 'Me animo a verte' },
+    a_bientot: { select: '¿Hasta pronto?', selected: 'Me gustaría volver a verte pronto' },
+    tu_me_dois_un_verre: { select: 'Me debes una copa', selected: 'Nos debemos una copa 😏' },
+
+    tu_m_as_fait_sourire: { select: 'Me hiciste sonreír', selected: 'Me hiciste sonreír hoy' },
+    ca_m_a_fait_plaisir: { select: 'Me alegró', selected: 'Me alegró verte' },
+    tu_m_as_manque_aujourdhui: { select: 'Te extrañé hoy', selected: 'Te extrañé hoy' },
+    jai_aime_te_voir: { select: 'Me gustó verte', selected: 'Me gustó pasar tiempo contigo' },
+    belle_surprise: { select: 'Bonita sorpresa', selected: 'Me alegró reencontrarte' },
   },
   languageSwitcher: {
     label: 'Idioma',

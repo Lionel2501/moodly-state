@@ -1,6 +1,9 @@
 import type fr from './fr';
 
 const en: typeof fr = {
+  meta: {
+    title: 'Kanjoo — Share your feelings',
+  },
   common: {
     loading: 'Loading...',
     copy: 'Copy',
@@ -120,6 +123,36 @@ const en: typeof fr = {
     atraccion: { select: 'Attraction', selected: "I'm attracted to you" },
     gusto: { select: 'I like you', selected: 'I like you' },
     sentimientos: { select: 'Feelings', selected: 'Feelings are starting to develop' },
+
+    dispo_ce_soir: { select: 'Free tonight?', selected: "I'm free tonight" },
+    on_se_voit: { select: 'Shall we meet up?', selected: "I'd like to see you" },
+    tu_fais_quoi: { select: 'What are you up to?', selected: 'I feel like spending time with you' },
+    un_verre: { select: 'A drink?', selected: "I'd love to grab a drink with you" },
+    on_se_retrouve: { select: 'Shall we meet?', selected: "I'd like for us to meet up" },
+
+    bon_moment: { select: 'Good time', selected: 'I had a great time with you' },
+    a_refaire: { select: "Let's do it again", selected: "I'd like to do that again with you" },
+    jai_aime: { select: 'I loved it', selected: 'I really loved that moment' },
+    merci_pour_ce_moment: { select: 'Thanks for that moment', selected: 'Thanks for that moment' },
+    encore: { select: 'Again?', selected: "I'd like to do it again" },
+
+    envie_de_te_parler: { select: 'I feel like talking to you', selected: 'I felt like talking to you' },
+    un_petit_message: { select: 'A little message', selected: 'I felt like writing to you' },
+    donne_moi_de_tes_nouvelles: { select: 'Give me your news', selected: "I'd like to hear from you" },
+    on_parle: { select: 'Shall we talk?', selected: "I'd like to chat with you" },
+    je_pense_a_toi_aujourdhui: { select: 'Thinking of you today', selected: 'I was thinking of you today' },
+
+    petit_coucou: { select: 'Little hello', selected: 'I just wanted to say hi' },
+    ca_te_dit: { select: 'Interested?', selected: "I'd love to do something with you" },
+    partant: { select: 'Up for it?', selected: "I'm up for seeing you" },
+    a_bientot: { select: 'See you soon?', selected: "I'd like to see you again soon" },
+    tu_me_dois_un_verre: { select: 'You owe me a drink', selected: 'We owe each other a drink 😏' },
+
+    tu_m_as_fait_sourire: { select: 'You made me smile', selected: 'You made me smile today' },
+    ca_m_a_fait_plaisir: { select: 'That made me happy', selected: 'It made me happy to see you' },
+    tu_m_as_manque_aujourdhui: { select: 'I missed you today', selected: 'I missed you today' },
+    jai_aime_te_voir: { select: 'I liked seeing you', selected: 'I liked spending time with you' },
+    belle_surprise: { select: 'Nice surprise', selected: 'It was great to see you again' },
   },
   languageSwitcher: {
     label: 'Language',

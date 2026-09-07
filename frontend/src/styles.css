@@ -610,10 +610,29 @@ button[type='submit']:hover {
   color: var(--accent);
 }
 
+.category-button-selected {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.category-button-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .category-button-name {
   font-family: 'Newsreader', serif;
   font-size: 16px;
   font-weight: 500;
+}
+
+.category-button-preview {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--muted-strong);
 }
 
 .state-list {

@@ -23,6 +23,13 @@ i18n
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
     },
+  })
+  .then(() => {
+    document.title = i18n.t('meta.title');
   });
+
+i18n.on('languageChanged', () => {
+  document.title = i18n.t('meta.title');
+});
 
 export default i18n;

@@ -1,4 +1,7 @@
 export default {
+  meta: {
+    title: 'Kanjoo — Partage tes sentiments',
+  },
   common: {
     loading: 'Chargement...',
     copy: 'Copier',
@@ -118,6 +121,36 @@ export default {
     atraccion: { select: 'Attirance', selected: 'Je suis attiré(e) par toi' },
     gusto: { select: 'Tu me plais', selected: 'Tu me plais' },
     sentimientos: { select: 'Sentiments', selected: 'Des sentiments commencent à apparaître' },
+
+    dispo_ce_soir: { select: 'Dispo ce soir ?', selected: 'Je suis dispo ce soir' },
+    on_se_voit: { select: 'On se voit ?', selected: "J'aimerais te voir" },
+    tu_fais_quoi: { select: 'Tu fais quoi ?', selected: "J'ai envie de passer un moment avec toi" },
+    un_verre: { select: 'Un verre ?', selected: 'Ça me dirait de boire un verre avec toi' },
+    on_se_retrouve: { select: 'On se retrouve ?', selected: "J'aimerais qu'on se retrouve" },
+
+    bon_moment: { select: 'Bon moment', selected: "J'ai passé un bon moment avec toi" },
+    a_refaire: { select: 'À refaire', selected: "J'aimerais refaire ça avec toi" },
+    jai_aime: { select: "J'ai aimé", selected: "J'ai vraiment aimé ce moment" },
+    merci_pour_ce_moment: { select: 'Merci pour ce moment', selected: 'Merci pour ce moment' },
+    encore: { select: 'Encore ?', selected: "J'aimerais recommencer" },
+
+    envie_de_te_parler: { select: "J'ai envie de te parler", selected: "J'avais envie de te parler" },
+    un_petit_message: { select: 'Un petit message', selected: "J'avais envie de t'écrire" },
+    donne_moi_de_tes_nouvelles: { select: 'Donne-moi de tes nouvelles', selected: "J'aimerais avoir de tes nouvelles" },
+    on_parle: { select: 'On parle ?', selected: "J'aimerais discuter avec toi" },
+    je_pense_a_toi_aujourdhui: { select: "Je pense à toi aujourd'hui", selected: 'Je pensais à toi aujourd’hui' },
+
+    petit_coucou: { select: 'Petit coucou', selected: 'Je voulais juste te faire un coucou' },
+    ca_te_dit: { select: 'Ça te dit ?', selected: 'Ça me dirait de faire quelque chose avec toi' },
+    partant: { select: 'Partant(e) ?', selected: 'Je suis partant(e) pour te voir' },
+    a_bientot: { select: 'À bientôt ?', selected: "J'aimerais te revoir bientôt" },
+    tu_me_dois_un_verre: { select: 'Tu me dois un verre', selected: 'On se doit un verre 😏' },
+
+    tu_m_as_fait_sourire: { select: "Tu m'as fait sourire", selected: "Tu m'as fait sourire aujourd'hui" },
+    ca_m_a_fait_plaisir: { select: "Ça m'a fait plaisir", selected: "Ça m'a fait plaisir de te voir" },
+    tu_m_as_manque_aujourdhui: { select: "Tu m'as manqué aujourd'hui", selected: "Tu m'as manqué aujourd'hui" },
+    jai_aime_te_voir: { select: "J'ai aimé te voir", selected: "J'ai aimé passer du temps avec toi" },
+    belle_surprise: { select: 'Belle surprise', selected: "Ça m'a fait plaisir de te retrouver" },
   },
   languageSwitcher: {
     label: 'Langue',

@@ -7,7 +7,7 @@ import { useCategoryTranslation } from '../i18n/categories';
 
 export default function SharePage() {
   const { t } = useTranslation();
-  const { categoryName } = useCategoryTranslation();
+  const { stateCategoryName } = useCategoryTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -58,6 +58,9 @@ export default function SharePage() {
         <main className="content content-center">
           <div className="card result-card">
             <p className="share-link-label">{t('share.yourUniqueLink')}</p>
+            <h2 style={{ fontSize: 22, margin: 0, textAlign: 'center' }}>
+              {stateCategoryName(result.categoryId, result.categoryName)}
+            </h2>
             <p className="hint" style={{ fontStyle: 'italic', margin: 0 }}>{discoverUrl(result.code)}</p>
             <button className="button primary gift-button" onClick={copyCode}>
               <svg
@@ -103,11 +106,12 @@ export default function SharePage() {
             {categories.map((c) => (
               <button
                 key={c.id}
+                type="button"
                 className="button category-button"
                 disabled={generating}
                 onClick={() => handleSelect(c)}
               >
-                <span className="category-button-name">{categoryName(c)}</span>
+                <span className="category-button-name">{stateCategoryName(c.id, c.selectedLabel)}</span>
                 <svg className="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 18l6-6-6-6" />
                 </svg>
