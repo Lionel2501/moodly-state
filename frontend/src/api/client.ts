@@ -8,7 +8,6 @@ export const api = axios.create({
 export interface Category {
   id: number;
   slug: string;
-  selectLabel: string;
   selectedLabel: string;
 }
 
