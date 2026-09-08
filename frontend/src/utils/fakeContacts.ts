@@ -62,16 +62,5 @@ export function generateFakeContacts(): ContactKanjoDto[] {
     }
   });
 
-  entries.push({
-    id: 'fake-unknown-0',
-    user: null,
-    categoryId: FAKE_CATEGORIES[0].id,
-    categoryName: FAKE_CATEGORIES[0].name,
-    direction: 'sent',
-    checked: false,
-    createdAt: daysAgo(1),
-    url: 'https://kanjoo.vercel.app/me/fakeunknown0',
-  });
-
   return entries;
 }

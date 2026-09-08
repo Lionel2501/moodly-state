@@ -6,7 +6,6 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import SetPasswordPage from './pages/SetPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import MainPage from './pages/MainPage';
-import GeneratePage from './pages/GeneratePage';
 import PublicStatePage from './pages/PublicStatePage';
 import SharePage from './pages/SharePage';
 import DiscoverPage from './pages/DiscoverPage';
@@ -27,7 +26,6 @@ export default function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainPage />} />
-          <Route path="/generate" element={<GeneratePage />} />
         </Route>
 
         {/* Must stay before the /:username/:code catch-all so it doesn't shadow this */}

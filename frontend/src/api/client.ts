@@ -108,10 +108,6 @@ export async function fetchContacts() {
   return data;
 }
 
-export async function deleteState(id: string) {
-  await api.delete(`/states/${id}`);
-}
-
 export async function createState(categoryId: number, aboutUserId?: string) {
   const { data } = await api.post<MoodStateDto>('/states', { categoryId, aboutUserId });
   return data;

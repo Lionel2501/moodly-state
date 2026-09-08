@@ -64,10 +64,6 @@ model MoodState {
   // {BASE_URL}/{username}/{code}, so the (username, code) pair is what
   // must resolve unambiguously — different users may share a code.
   @@unique([userId, code])
-  // A given creator can only have one state about any particular person
-  // at a time (NULLs are exempt: Postgres treats each NULL as distinct,
-  // so states with no aboutUser never collide here).
-  @@unique([userId, aboutUserId])
   @@index([userId])
   @@index([aboutUserId])
 }

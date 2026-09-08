@@ -45,33 +45,17 @@ export class StatesService {
         continue;
       }
 
-      // A creator can only have one state about a given person at a time —
-      // associating a new one to someone who already has one replaces it.
-      const state = aboutUser
-        ? await this.prisma.moodState.upsert({
-            where: { userId_aboutUserId: { userId, aboutUserId: aboutUser.id } },
-            update: {
-              code,
-              categoryId: category.id,
-              categoryName: category.selectedLabel,
-              createdAt: new Date(),
-            },
-            create: {
-              userId,
-              code,
-              categoryId: category.id,
-              categoryName: category.selectedLabel,
-              aboutUserId: aboutUser.id,
-            },
-          })
-        : await this.prisma.moodState.create({
-            data: {
-              userId,
-              code,
-              categoryId: category.id,
-              categoryName: category.selectedLabel,
-            },
-          });
+      // Every send is its own entry in the conversation — a creator can have
+      // any number of states about the same person over time.
+      const state = await this.prisma.moodState.create({
+        data: {
+          userId,
+          code,
+          categoryId: category.id,
+          categoryName: category.selectedLabel,
+          aboutUserId: aboutUser?.id,
+        },
+      });
 
       return {
         id: state.id,

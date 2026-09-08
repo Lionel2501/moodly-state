@@ -684,12 +684,6 @@ button[type='submit']:hover {
   white-space: nowrap;
 }
 
-.contact-username-unknown {
-  font-weight: 500;
-  font-style: italic;
-  color: var(--muted);
-}
-
 .contact-badge {
   flex-shrink: 0;
   font-size: 10px;
@@ -715,53 +709,12 @@ button[type='submit']:hover {
   color: var(--secondary);
 }
 
-.contact-toggle {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 0;
-  min-height: auto;
-  cursor: pointer;
-  text-align: left;
-}
-
-.contact-toggle:hover {
-  border: none;
-}
-
-.contact-kanjo-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-left: 44px;
-}
-
 .contact-kanjo {
   margin: 0;
   font-family: 'Newsreader', serif;
   font-size: 18px;
   font-weight: 500;
   color: var(--text);
-}
-
-.contact-chevron {
-  flex-shrink: 0;
-  color: var(--muted);
-  transition: transform 150ms ease;
-}
-
-.contact-chevron-open {
-  transform: rotate(180deg);
-}
-
-.contact-actions {
-  display: flex;
-  gap: 8px;
-  padding-left: 44px;
 }
 
 .button.small,
@@ -774,15 +727,6 @@ button.small {
 .icon-button {
   padding: 8px 10px;
   flex: none;
-}
-
-.icon-button-danger {
-  color: var(--danger);
-}
-
-.icon-button-danger:hover {
-  border-color: var(--danger);
-  background: rgba(156, 55, 48, 0.08);
 }
 
 .category-grid-compact {
@@ -1032,17 +976,30 @@ button.small {
   gap: 16px;
 }
 
-.history-send-button {
-  margin-left: auto;
-}
-
 .history-back {
   display: none;
 }
 
-.history-entries .contact-kanjo-row,
-.history-entries .contact-actions {
-  padding-left: 0;
+.conversation-send-button {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 20px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Chat-bubble layout: sent kanjos hug the right edge, received ones the
+   left, each capped at half the conversation width like a messaging app. */
+.history-entries .contact-card {
+  width: 70%;
+}
+
+.history-entries .contact-card-sent {
+  align-self: flex-end;
+}
+
+.history-entries .contact-card-received {
+  align-self: flex-start;
 }
 
 @media (max-width: 760px) {
