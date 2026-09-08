@@ -894,6 +894,28 @@ button.small {
   gap: 8px;
 }
 
+.contact-search-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  min-height: 40px;
+}
+
+.contact-search-input::placeholder {
+  color: #8b9482;
+}
+
+.contact-search-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 .contacts-sidebar {
   width: 300px;
   flex-shrink: 0;
@@ -978,6 +1000,29 @@ button.small {
 
 .history-back {
   display: none;
+}
+
+.relationship-status-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: -12px;
+}
+
+.relationship-status-trigger {
+  font-weight: 600;
+}
+
+.relationship-status-theirs {
+  font-style: italic;
+}
+
+.relationship-status-options {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .conversation-send-button {

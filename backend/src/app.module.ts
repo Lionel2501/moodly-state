@@ -7,6 +7,7 @@ import { StatesModule } from './states/states.module';
 import { PublicModule } from './public/public.module';
 import { UsersModule } from './users/users.module';
 import { SharedStatesModule } from './shared-states/shared-states.module';
+import { RelationshipStatusModule } from './relationship-status/relationship-status.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SharedStatesModule } from './shared-states/shared-states.module';
     PublicModule,
     UsersModule,
     SharedStatesModule,
+    RelationshipStatusModule,
   ],
 })
 export class AppModule {}

@@ -57,6 +57,17 @@ export interface AuthUser {
   username: string;
 }
 
+export interface RelationshipStatusOption {
+  id: number;
+  slug: string;
+  label: string;
+}
+
+export interface RelationshipStatusEntry {
+  statusId: number;
+  updatedAt: string;
+}
+
 export async function register(email: string) {
   const { data } = await api.post<{ message: string }>('/auth/register', { email });
   return data.message;
@@ -130,5 +141,26 @@ export async function createSharedState(categoryId: number) {
 
 export async function discoverSharedState(code: string) {
   const { data } = await api.get<SharedStateDto>(`/shared-states/${encodeURIComponent(code)}`);
+  return data;
+}
+
+export async function fetchRelationshipStatusOptions() {
+  const { data } = await api.get<{ statuses: RelationshipStatusOption[] }>('/relationship-status/options');
+  return data.statuses;
+}
+
+export async function fetchRelationshipStatusContacts() {
+  const { data } = await api.get<{
+    mine: (RelationshipStatusEntry & { aboutUserId: string })[];
+    theirs: (RelationshipStatusEntry & { userId: string })[];
+  }>('/relationship-status/contacts');
+  return data;
+}
+
+export async function setRelationshipStatus(aboutUserId: string, statusId: number) {
+  const { data } = await api.put<RelationshipStatusEntry & { aboutUserId: string }>(
+    `/relationship-status/${aboutUserId}`,
+    { statusId },
+  );
   return data;
 }

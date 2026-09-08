@@ -6,8 +6,12 @@ import {
   fetchCategories,
   createState,
   searchUsers,
+  fetchRelationshipStatusOptions,
+  fetchRelationshipStatusContacts,
+  setRelationshipStatus,
   Category,
   ContactKanjoDto,
+  RelationshipStatusOption,
   UserSummary,
 } from '../api/client';
 import { generateFakeContacts } from '../utils/fakeContacts';
@@ -59,7 +63,6 @@ export default function MainPage() {
   const [composing, setComposing] = useState(false);
   const [sendingNew, setSendingNew] = useState(false);
   const [sendError, setSendError] = useState(false);
-  const [addingContact, setAddingContact] = useState(false);
   const [contactQuery, setContactQuery] = useState('');
   const [contactResults, setContactResults] = useState<UserSummary[]>([]);
   const [searchingContact, setSearchingContact] = useState(false);
@@ -67,17 +70,31 @@ export default function MainPage() {
   // entry in `contacts` (there's nothing in the DB to derive it from), so
   // it can't come out of groupByContact like every other thread.
   const [pendingContact, setPendingContact] = useState<UserSummary | null>(null);
+  const [statusOptions, setStatusOptions] = useState<RelationshipStatusOption[]>([]);
+  // What I set for each contact (keyed by their user id), and what each
+  // contact set about me in return — two independent, both-visible values,
+  // not a negotiated/confirmed single status.
+  const [myStatusByContact, setMyStatusByContact] = useState<Record<string, number>>({});
+  const [theirStatusByContact, setTheirStatusByContact] = useState<Record<string, number>>({});
+  const [editingStatus, setEditingStatus] = useState(false);
+  const [settingStatus, setSettingStatus] = useState(false);
 
   useEffect(() => {
     fetchContacts()
       .then(setContacts)
       .finally(() => setLoading(false));
     fetchCategories().then(setCategories);
+    fetchRelationshipStatusOptions().then(setStatusOptions);
+    fetchRelationshipStatusContacts().then(({ mine, theirs }) => {
+      setMyStatusByContact(Object.fromEntries(mine.map((r) => [r.aboutUserId, r.statusId])));
+      setTheirStatusByContact(Object.fromEntries(theirs.map((r) => [r.userId, r.statusId])));
+    });
   }, []);
 
   useEffect(() => {
     setComposing(false);
     setSendError(false);
+    setEditingStatus(false);
   }, [selectedKey]);
 
   useEffect(() => {
@@ -101,12 +118,7 @@ export default function MainPage() {
       ? { key: pendingContact.id, user: pendingContact, entries: [] }
       : null);
 
-  function startAddingContact() {
-    setAddingContact(true);
-  }
-
-  function cancelAddingContact() {
-    setAddingContact(false);
+  function clearContactSearch() {
     setContactQuery('');
     setContactResults([]);
   }
@@ -114,7 +126,16 @@ export default function MainPage() {
   function pickNewContact(newContact: UserSummary) {
     setPendingContact(newContact);
     setSelectedKey(newContact.id);
-    cancelAddingContact();
+    clearContactSearch();
+  }
+
+  function runContactSearch() {
+    const query = contactQuery.trim();
+    if (!query) return;
+    setSearchingContact(true);
+    searchUsers(query)
+      .then(setContactResults)
+      .finally(() => setSearchingContact(false));
   }
 
   function toggleDemoMode() {
@@ -159,6 +180,24 @@ export default function MainPage() {
     }
   }
 
+  async function pickStatus(option: RelationshipStatusOption) {
+    if (!selectedThread?.user) return;
+    setSettingStatus(true);
+    try {
+      await setRelationshipStatus(selectedThread.user.id, option.id);
+      setMyStatusByContact((prev) => ({ ...prev, [selectedThread.user.id]: option.id }));
+      setEditingStatus(false);
+    } finally {
+      setSettingStatus(false);
+    }
+  }
+
+  function statusLabel(statusId: number): string {
+    const option = statusOptions.find((s) => s.id === statusId);
+    if (!option) return '';
+    return t(`relationshipStatuses.${option.slug}`, { defaultValue: option.label });
+  }
+
   function formatDate(iso: string) {
     const date = new Date(iso);
     const datePart = date.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
@@ -186,38 +225,34 @@ export default function MainPage() {
       <main className={`main-layout ${selectedThread ? 'has-selection' : ''}`}>
         <section className="contacts-sidebar">
           <div className="sidebar-header">
-            <span className="section-label">{t('main.contacts')}</span>
+            <input
+              type="text"
+              className="contact-search-input"
+              placeholder={t('generate.searchUserPlaceholder')}
+              value={contactQuery}
+              onChange={(e) => setContactQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') runContactSearch();
+              }}
+            />
             <button
               type="button"
               className="button icon-button"
-              aria-label={t('main.addContact')}
-              title={t('main.addContact')}
-              onClick={startAddingContact}
+              aria-label={t('generate.searchUserPlaceholder')}
+              title={t('generate.searchUserPlaceholder')}
+              onClick={runContactSearch}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14" />
-                <path d="M5 12h14" />
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
               </svg>
             </button>
           </div>
 
-          {addingContact ? (
-            <div className="user-search fade-in">
-              <div className="compose-header">
-                <span className="section-label">{t('generate.associateWith')}</span>
-                <button type="button" className="link-button" onClick={cancelAddingContact}>
-                  {t('common.cancel')}
-                </button>
-              </div>
-              <input
-                type="text"
-                autoFocus
-                placeholder={t('generate.searchUserPlaceholder')}
-                value={contactQuery}
-                onChange={(e) => setContactQuery(e.target.value)}
-              />
+          {contactQuery.trim() ? (
+            <>
               {searchingContact && <p className="hint">{t('generate.searching')}</p>}
-              {!searchingContact && contactQuery.trim() && contactResults.length === 0 && (
+              {!searchingContact && contactResults.length === 0 && (
                 <p className="hint">{t('generate.noUserFound')}</p>
               )}
               {!searchingContact && contactResults.length > 0 && (
@@ -231,7 +266,7 @@ export default function MainPage() {
                   ))}
                 </ul>
               )}
-            </div>
+            </>
           ) : (
             <>
               {loading && <p className="hint">{t('common.loading')}</p>}
@@ -280,6 +315,52 @@ export default function MainPage() {
                   <span className="contact-username">@{selectedThread.user.username}</span>
                 </div>
               </div>
+
+              <div className="relationship-status-row">
+                <button
+                  type="button"
+                  className="link-button relationship-status-trigger"
+                  onClick={() => setEditingStatus((prev) => !prev)}
+                >
+                  {myStatusByContact[selectedThread.user.id] !== undefined
+                    ? t('main.relationshipStatusLabel', { status: statusLabel(myStatusByContact[selectedThread.user.id]) })
+                    : t('main.setRelationshipStatus')}
+                </button>
+                {theirStatusByContact[selectedThread.user.id] !== undefined && (
+                  <span className="hint relationship-status-theirs">
+                    {t('main.theirRelationshipStatus', {
+                      username: selectedThread.user.username,
+                      status: statusLabel(theirStatusByContact[selectedThread.user.id]),
+                    })}
+                  </span>
+                )}
+              </div>
+
+              {editingStatus && (
+                <div className="category-grid category-grid-compact category-grid-conversation fade-in">
+                  <div className="compose-header">
+                    <span className="section-label">{t('main.setRelationshipStatus')}</span>
+                    <button type="button" className="link-button" disabled={settingStatus} onClick={() => setEditingStatus(false)}>
+                      {t('common.cancel')}
+                    </button>
+                  </div>
+                  <div className="relationship-status-options">
+                    {statusOptions.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        className="button category-button category-button-compact"
+                        disabled={settingStatus}
+                        onClick={() => pickStatus(option)}
+                      >
+                        <span className="category-button-name">
+                          {t(`relationshipStatuses.${option.slug}`, { defaultValue: option.label })}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {selectedThread.entries.length === 0 && !composing && (
                 <p className="hint history-placeholder">{t('main.newContactHint')}</p>
