@@ -16,6 +16,7 @@ import {
 } from '../api/client';
 import { generateFakeContacts } from '../utils/fakeContacts';
 import BrandMark from '../components/BrandMark';
+import InstallPwaButton from '../components/InstallPwaButton';
 import { useCategoryTranslation } from '../i18n/categories';
 
 interface ContactThread {
@@ -43,10 +44,14 @@ function groupByContact(contacts: ContactKanjoDto[]): ContactThread[] {
 
   const threads = Array.from(threadsByKey.values());
   threads.forEach((thread) =>
-    thread.entries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    // Oldest first so the most recently sent kanjo renders at the bottom
+    // of the conversation, next to the compose button, like a chat thread.
+    thread.entries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()),
   );
   threads.sort(
-    (a, b) => new Date(b.entries[0].createdAt).getTime() - new Date(a.entries[0].createdAt).getTime(),
+    (a, b) =>
+      new Date(b.entries[b.entries.length - 1].createdAt).getTime() -
+      new Date(a.entries[a.entries.length - 1].createdAt).getTime(),
   );
   return threads;
 }
@@ -210,6 +215,7 @@ export default function MainPage() {
       <header className="topbar">
         <BrandMark size="sm" inline />
         <div className="topbar-actions">
+          <InstallPwaButton />
           {import.meta.env.DEV && (
             <button className="link-button" onClick={toggleDemoMode}>
               {demoMode ? t('main.previewRealData') : t('main.previewFakeData')}
@@ -273,7 +279,7 @@ export default function MainPage() {
               {!loading && threads.length === 0 && <p className="hint">{t('main.noContactsYet')}</p>}
               <ul className="state-list">
                 {threads.map((thread) => {
-                  const latest = thread.entries[0];
+                  const latest = thread.entries[thread.entries.length - 1];
                   return (
                     <li key={thread.key}>
                       <button
