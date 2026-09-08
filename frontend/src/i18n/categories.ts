@@ -36,12 +36,12 @@ const CATEGORY_SLUGS_BY_ID: Record<number, string> = {
   27: 'ca_te_dit',
   28: 'partant',
   29: 'a_bientot',
-  30: 'tu_me_dois_un_verre',
   31: 'tu_m_as_fait_sourire',
   32: 'ca_m_a_fait_plaisir',
   33: 'tu_m_as_manque_aujourdhui',
   34: 'jai_aime_te_voir',
   35: 'belle_surprise',
+  36: 'tu_me_plais',
 };
 
 export function useCategoryTranslation() {

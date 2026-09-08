@@ -126,6 +126,7 @@ const es: typeof fr = {
     extranar: { select: 'Extrañar', selected: 'Te extraño' },
     atraccion: { select: 'Atracción', selected: 'Me siento atraído/a por ti' },
     gusto: { select: 'Me gustas', selected: 'Me gustas' },
+    tu_me_plais: { select: 'Me gustas', selected: 'Me gustas' },
     sentimientos: { select: 'Sentimientos', selected: 'Empiezan a surgir sentimientos' },
 
     dispo_ce_soir: { select: '¿Libre esta noche?', selected: 'Estoy libre esta noche' },
@@ -150,7 +151,6 @@ const es: typeof fr = {
     ca_te_dit: { select: '¿Te apetece?', selected: 'Me apetece hacer algo contigo' },
     partant: { select: '¿Te animas?', selected: 'Me animo a verte' },
     a_bientot: { select: '¿Hasta pronto?', selected: 'Me gustaría volver a verte pronto' },
-    tu_me_dois_un_verre: { select: 'Me debes una copa', selected: 'Nos debemos una copa 😏' },
 
     tu_m_as_fait_sourire: { select: 'Me hiciste sonreír', selected: 'Me hiciste sonreír hoy' },
     ca_m_a_fait_plaisir: { select: 'Me alegró', selected: 'Me alegró verte' },

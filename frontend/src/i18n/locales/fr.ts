@@ -124,6 +124,7 @@ export default {
     extranar: { select: 'Manque', selected: 'Tu me manques' },
     atraccion: { select: 'Attirance', selected: 'Je suis attiré(e) par toi' },
     gusto: { select: 'Tu me plais', selected: 'Tu me plais' },
+    tu_me_plais: { select: 'Tu me plais', selected: 'Tu me plais' },
     sentimientos: { select: 'Sentiments', selected: 'Des sentiments commencent à apparaître' },
 
     dispo_ce_soir: { select: 'Dispo ce soir ?', selected: 'Je suis dispo ce soir' },
@@ -148,7 +149,6 @@ export default {
     ca_te_dit: { select: 'Ça te dit ?', selected: 'Ça me dirait de faire quelque chose avec toi' },
     partant: { select: 'Partant(e) ?', selected: 'Je suis partant(e) pour te voir' },
     a_bientot: { select: 'À bientôt ?', selected: "J'aimerais te revoir bientôt" },
-    tu_me_dois_un_verre: { select: 'Tu me dois un verre', selected: 'On se doit un verre 😏' },
 
     tu_m_as_fait_sourire: { select: "Tu m'as fait sourire", selected: "Tu m'as fait sourire aujourd'hui" },
     ca_m_a_fait_plaisir: { select: "Ça m'a fait plaisir", selected: "Ça m'a fait plaisir de te voir" },

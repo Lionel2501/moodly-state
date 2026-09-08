@@ -418,13 +418,6 @@ button[type='submit']:hover {
   margin: 0;
 }
 
-.generate-button {
-  font-size: 16px;
-  font-weight: 600;
-  padding: 16px 20px;
-  width: 100%;
-}
-
 .user-search {
   display: flex;
   flex-direction: column;
@@ -797,6 +790,18 @@ button.small {
   margin-left: 44px;
 }
 
+.category-grid-conversation {
+  margin-left: 0;
+}
+
+.compose-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
 .category-button-compact {
   padding: 10px 14px;
   font-size: 14px;
@@ -938,6 +943,13 @@ button.small {
   align-items: flex-start;
 }
 
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .contacts-sidebar {
   width: 300px;
   flex-shrink: 0;
@@ -1020,6 +1032,10 @@ button.small {
   gap: 16px;
 }
 
+.history-send-button {
+  margin-left: auto;
+}
+
 .history-back {
   display: none;
 }
@@ -1049,6 +1065,24 @@ button.small {
 
   .history-back {
     display: inline-flex;
+  }
+
+  .history-header {
+    gap: 10px;
+  }
+
+  /* On the tight mobile viewport, 35 category buttons pushed inline would
+     bury the conversation below a wall of options — a full-screen sheet
+     with the cancel action pinned at top (not after a long scroll) reads
+     as an intentional "compose" step instead. */
+  .category-grid-conversation {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: var(--bg);
+    margin: 0;
+    padding: 16px;
+    overflow-y: auto;
   }
 }
 

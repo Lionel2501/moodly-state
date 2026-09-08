@@ -126,6 +126,7 @@ const en: typeof fr = {
     extranar: { select: 'Missing you', selected: 'I miss you' },
     atraccion: { select: 'Attraction', selected: "I'm attracted to you" },
     gusto: { select: 'I like you', selected: 'I like you' },
+    tu_me_plais: { select: 'I like you', selected: 'I like you' },
     sentimientos: { select: 'Feelings', selected: 'Feelings are starting to develop' },
 
     dispo_ce_soir: { select: 'Free tonight?', selected: "I'm free tonight" },
@@ -150,7 +151,6 @@ const en: typeof fr = {
     ca_te_dit: { select: 'Interested?', selected: "I'd love to do something with you" },
     partant: { select: 'Up for it?', selected: "I'm up for seeing you" },
     a_bientot: { select: 'See you soon?', selected: "I'd like to see you again soon" },
-    tu_me_dois_un_verre: { select: 'You owe me a drink', selected: 'We owe each other a drink 😏' },
 
     tu_m_as_fait_sourire: { select: 'You made me smile', selected: 'You made me smile today' },
     ca_m_a_fait_plaisir: { select: 'That made me happy', selected: 'It made me happy to see you' },

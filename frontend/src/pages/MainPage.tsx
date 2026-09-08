@@ -50,6 +50,8 @@ export default function MainPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [composing, setComposing] = useState(false);
+  const [sendingNew, setSendingNew] = useState(false);
 
   useEffect(() => {
     fetchContacts()
@@ -57,6 +59,10 @@ export default function MainPage() {
       .finally(() => setLoading(false));
     fetchCategories().then(setCategories);
   }, []);
+
+  useEffect(() => {
+    setComposing(false);
+  }, [selectedKey]);
 
   const threads = useMemo(() => groupByContact(contacts), [contacts]);
   const selectedThread = threads.find((thread) => thread.key === selectedKey) ?? null;
@@ -112,6 +118,30 @@ export default function MainPage() {
     }
   }
 
+  async function sendKanjoToThread(category: Category) {
+    if (!selectedThread?.user) return;
+    setSendingNew(true);
+    try {
+      const state = await createState(category.id, selectedThread.user.id);
+      setContacts((prev) => [
+        {
+          id: state.id,
+          user: state.aboutUser,
+          categoryId: state.categoryId,
+          categoryName: state.categoryName,
+          direction: 'sent' as const,
+          checked: false,
+          createdAt: state.createdAt,
+          url: state.url,
+        },
+        ...prev.filter((c) => c.id !== state.id),
+      ]);
+      setComposing(false);
+    } finally {
+      setSendingNew(false);
+    }
+  }
+
   async function removeContact(contact: ContactKanjoDto) {
     if (!window.confirm(t('main.confirmDelete'))) return;
     setDeletingId(contact.id);
@@ -151,7 +181,20 @@ export default function MainPage() {
 
       <main className={`main-layout ${selectedThread ? 'has-selection' : ''}`}>
         <section className="contacts-sidebar">
-          <span className="section-label">{t('main.contacts')}</span>
+          <div className="sidebar-header">
+            <span className="section-label">{t('main.contacts')}</span>
+            <Link
+              to="/generate"
+              className="button icon-button"
+              aria-label={t('main.generate')}
+              title={t('main.generate')}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+            </Link>
+          </div>
           {loading && <p className="hint">{t('common.loading')}</p>}
           {!loading && threads.length === 0 && <p className="hint">{t('main.noContactsYet')}</p>}
           <ul className="state-list">
@@ -179,10 +222,6 @@ export default function MainPage() {
               );
             })}
           </ul>
-
-          <Link to="/generate" className="button primary generate-button">
-            {t('main.generate')}
-          </Link>
         </section>
 
         <section className="history-panel">
@@ -202,7 +241,42 @@ export default function MainPage() {
                     {selectedThread.user ? `@${selectedThread.user.username}` : t('main.unknownUser')}
                   </span>
                 </div>
+                {selectedThread.user && (
+                  <button
+                    type="button"
+                    className="button icon-button history-send-button"
+                    aria-label={t('main.generate')}
+                    title={t('main.generate')}
+                    onClick={() => setComposing((prev) => !prev)}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 5v14" />
+                      <path d="M5 12h14" />
+                    </svg>
+                  </button>
+                )}
               </div>
+
+              {composing && (
+                <div className="category-grid category-grid-compact category-grid-conversation fade-in">
+                  <div className="compose-header">
+                    <span className="section-label">{t('generate.category')}</span>
+                    <button type="button" className="link-button" disabled={sendingNew} onClick={() => setComposing(false)}>
+                      {t('common.cancel')}
+                    </button>
+                  </div>
+                  {categories.map((c) => (
+                    <button
+                      key={c.id}
+                      className="button category-button category-button-compact"
+                      disabled={sendingNew}
+                      onClick={() => sendKanjoToThread(c)}
+                    >
+                      <span className="category-button-name">{categoryName(c)}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <ul className="state-list history-entries">
                 {selectedThread.entries.map((contact) => (
