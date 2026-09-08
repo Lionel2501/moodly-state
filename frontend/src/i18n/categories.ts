@@ -28,9 +28,10 @@ const CATEGORY_SLUGS_BY_ID: Record<number, string> = {
 export function useCategoryTranslation() {
   const { t } = useTranslation();
 
-  // Shown to the user generating/sending a kanjo (the picker).
-  function categoryName(category: Pick<Category, 'slug' | 'selectLabel'>): string {
-    return t(`kanjos.${category.slug}.select`, { defaultValue: category.selectLabel });
+  // Shown to the user both when picking a kanjo to send and when
+  // discovering/receiving one.
+  function categoryName(category: Pick<Category, 'slug' | 'selectedLabel'>): string {
+    return t(`kanjos.${category.slug}.selected`, { defaultValue: category.selectedLabel });
   }
 
   // Shown to the user discovering/receiving a kanjo. categoryId is null for
